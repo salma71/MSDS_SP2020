@@ -1,0 +1,117 @@
+---
+title: "Week_2 605 assignment"
+author: "Salma Elshahawy"
+date: "1/14/2020"
+output: 
+  pdf_document: 
+    extra_dependencies: ["geometry"]
+    latex_engine: xelatex
+    keep_tex: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem set_1
+
+### (1) Show that "${ A }^{ T }A\quad \neq \quad A{ A }^{ T }$" in general.
+
+```{r}
+# creating a matrix A
+A <- matrix(c(1,2,3,4,5,6,7,8,9), nrow = 3)
+A
+```
+```{r}
+# get A transpose and assign it to At
+At <- t(A)
+At
+```
+
+```{r}
+# mutliply matrix A by it's transpose A*t(A)
+left_side <- A %*% At
+left_side
+```
+
+```{r}
+# mutliply matrix transpose A by the original matrix t(A)*A
+right_side <- At %*% A
+right_side
+```
+```{r}
+# check if the two sides are in equilibrium state
+left_side == right_side
+```
+
+Both sides are not equal, so in general ${ A }^{ T }A\quad \neq \quad A{ A }^{ T }$
+
+
+
+### (2) For a special type of square matrix A, we get ${ A }^{ T }A\quad =\quad A{ A }^{ T }$ . Under what conditions could this be true? (Hint: The Identity matrix I is an example of such a matrix).
+
+_Please typeset your response using LaTeX/SWeave mode in RStudio. If you do it in paper, please either scan or take a picture of the work and submit it. Please en- sure that your image is legible and that your submissions are named using your first initial, last name, assignment and problem set within the assignment._
+
+```{r}
+# construct a diagonal matrix
+# 
+A <- matrix(c(1,0,0,0,5,0,0,0,9), nrow = 3)
+A <- 5 * A # multiply by a scaler
+A
+```
+
+```{r}
+A%*%t(A) == t(A)%*%A
+```
+
+I Observed that when a matrix is symmetric, the matrix is equal to its transpose, ${ A }^{ T }A\quad =\quad A{ A }^{ T }$
+
+The conditions:
+
+  1- Be a square matrix $A_{ i\times j }\quad =\quad { A }_{ j\times i }^{ T }$
+  
+  2- The upper and lower triangle are equal to zero $\begin{matrix} { a }_{ ij } & 0 & 0 \\ 0 & { a }_{ ij } & 0 \\ 0 & 0 & { a }_{ ij } \end{matrix}$
+
+## Problem set_2
+
+Matrix factorization is a very important problem. There are supercomputers built just to do matrix factorizations. Every second you are on an airplane, matrices are being factorized. Radars that track flights use a technique called Kalman filtering. At the heart of Kalman Filtering is a Matrix Factorization operation. Kalman Filters are solving linear systems of equations when they track your flight using radars.
+Write an R function to factorize a square matrix A into LU or LDU, whichever you prefer.
+
+_Please submit your response in an R Markdown document using our class naming convention. You don’t have to worry about permuting rows of A and you can assume that A is less than 5x5, if you need to hard-code any variables in your code. If you doing the entire assignment in R, then please submit only one markdown document for both the problems._
+
+```{r}
+a <- matrix(c(2,4,-2,1,-1,5,3,3,5), ncol = 3)
+a
+
+get_UL <- function(a) {
+  U = a
+  L = diag(nrow(a))
+  n = nrow(a)
+  for (i in 1:n) {
+    k = seq(2, n)
+    for (j in k) {
+      if(j > i) {
+        # get the multiplier and add it to the L matrix
+        s = U[[j,i]]/U[[i,i]]
+        L[j,i] = s
+        # reduce by reduction and shuffle to the U matrix
+        U[j,] = U[j,] - s * U[i,]
+      }
+    }
+  }
+  return(list(U = U, L = L))
+}
+
+value <- get_UL(a)  
+U_matrix <- value$U
+U_matrix
+L_matrix <- value$L
+L_matrix
+```
+
+
+
+
+
+
+
