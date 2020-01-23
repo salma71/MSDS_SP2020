@@ -20,21 +20,28 @@ knitr::opts_chunk$set(echo = TRUE)
 $\begin{bmatrix} 1 & 2 & 3 & 4 \\ -1 & 0 & 1 & 3 \\ 0 & 1 & -2 & 1 \\ 5 & 4 & -2 & -3 \end{bmatrix}$
 
 ```{r}
-a <- matrix(c(1,2,3,4,
+a_mEn <- matrix(c(1,2,3,4,
               -1,0,1,3,
               0,1,-2,1,
               5,4,-2,-3), 4, byrow=T)
 # a <- matrix(c(0,1,2,1,2,7,2,1,8), ncol = 3)
-a
+a_mEn
 ```
 
 ```{r}
-a <- matrix(c(1,2,3,4,
+a_mbn <- matrix(c(1,2,3,4,
               -1,0,1,3), 4, byrow=T)
-a
+a_mbn
 ```
+
 ```{r}
-get_U <- function(a) {
+a_mln <- matrix(c(1,2,3,4,
+              -1,0,1,3), 2, byrow=T)
+a_mln
+```
+
+```{r}
+get_echoln <- function(a) {
   U = a
   n = ncol(a)
   m = nrow(a)
@@ -88,24 +95,40 @@ get_U <- function(a) {
   return(round(U, digits = 1))
 }
 
-c = get_U(a)
-c
+equal = get_echoln(a_mEn)
+equal
+
+greater = get_echoln(a_mbn)
+greater
+
+lesser = get_echoln(a_mln)
+lesser
 ```
 ```{r}
-inter = function(cd) {
+
+# rank needs to be modified
+ranking = function(cd) {
   rank = 0
   sol = as.array(colSums(cd))
   # [1]  1  3  6 10
   for (i in 1:length(sol)) {
-    if(sol[i] != 0) {
+    if(sol[i] != 0 & ncol(cd) <= nrow(cd)) {
       rank = rank + 1
+    } else if (sol[i] != 0 & ncol(cd) > nrow(cd)) {
+      rank = nrow(cd)
     }
   }
   return(rank)
 }
 
-d = inter(c)
-d
+r1 = ranking(equal)
+r1
+
+r2 = ranking(greater)
+r2
+
+r3 = ranking(lesser)
+r3
 ```
 
 
