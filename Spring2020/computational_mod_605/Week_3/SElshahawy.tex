@@ -136,7 +136,24 @@
 \subsubsection{(1) What is the rank of the matrix
 A?}\label{what-is-the-rank-of-the-matrix-a}}
 
-\(\begin{bmatrix} 1 & 2 & 3 & 4 \\ -1 & 0 & 1 & 3 \\ 0 & 1 & -2 & 1 \\ 5 & 4 & -2 & -3 \end{bmatrix}\)
+\[\begin{bmatrix} 1 & 2 & 3 & 4 \\ -1 & 0 & 1 & 3 \\ 0 & 1 & -2 & 1 \\ 5 & 4 & -2 & -3 \end{bmatrix}\]
+For this problem, I decided to implement a function to calculate the row
+reduced matrix and the rank to practice my coding skills. I implemented
+a generic function to calculate any \(`m\times n`\). I have three cases
+for ranking a matrix as following:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  m \textgreater{} n
+\item
+  m \textless{} n
+\item
+  Finally m = n
+\end{enumerate}
+
+Those were the edge cases we need to work on to built the function.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -212,10 +229,7 @@ A?}\label{what-is-the-rank-of-the-matrix-a}}
       \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{m) \{}
         \ControlFlowTok{if}\NormalTok{(U[j,i] }\OperatorTok{!=}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\NormalTok{j }\OperatorTok{>}\StringTok{ }\NormalTok{i) \{}
 \NormalTok{          U[i,] =}\StringTok{ }\NormalTok{U[i,] }\OperatorTok{/}\StringTok{ }\NormalTok{U[[i,i]]}
-          \CommentTok{# Add multiples of the pivot row to each of the lower rows, }
-          \CommentTok{# so every element in the pivot column of the lower rows equals 0.}
 \NormalTok{          mplier =}\StringTok{ }\NormalTok{U[[j,i]]}\OperatorTok{/}\NormalTok{U[[i,i]]}
-          \CommentTok{# reduce by reduction and subtitute in the U matrix}
 \NormalTok{          U[j,] =}\StringTok{ }\NormalTok{U[j,] }\OperatorTok{-}\StringTok{ }\NormalTok{mplier }\OperatorTok{*}\StringTok{ }\NormalTok{U[i,]}
           
 \NormalTok{        \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(U[j,i] }\OperatorTok{!=}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\NormalTok{j }\OperatorTok{==}\StringTok{ }\NormalTok{i) \{}
@@ -228,10 +242,9 @@ A?}\label{what-is-the-rank-of-the-matrix-a}}
       \ControlFlowTok{for}\NormalTok{ (j }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{m) \{}
         \ControlFlowTok{if}\NormalTok{(U[j,i] }\OperatorTok{!=}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\NormalTok{j }\OperatorTok{>}\StringTok{ }\NormalTok{i) \{}
 \NormalTok{          U[i,] =}\StringTok{ }\NormalTok{U[i,] }\OperatorTok{/}\StringTok{ }\NormalTok{U[[i,i]]}
-          \CommentTok{# Add multiples of the pivot row to each of the lower rows, }
-          \CommentTok{# so every element in the pivot column of the lower rows equals 0.}
+
 \NormalTok{          mplier =}\StringTok{ }\NormalTok{U[[j,i]]}\OperatorTok{/}\NormalTok{U[[i,i]]}
-          \CommentTok{# reduce by reduction and subtitute in the U matrix}
+          
 \NormalTok{          U[j,] =}\StringTok{ }\NormalTok{U[j,] }\OperatorTok{-}\StringTok{ }\NormalTok{mplier }\OperatorTok{*}\StringTok{ }\NormalTok{U[i,]}
           
 \NormalTok{        \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{(U[j,i] }\OperatorTok{!=}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\NormalTok{j }\OperatorTok{==}\StringTok{ }\NormalTok{i) \{}
@@ -258,31 +271,13 @@ A?}\label{what-is-the-rank-of-the-matrix-a}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{greater =}\StringTok{ }\KeywordTok{get_echoln}\NormalTok{(a_mbn)}
-\NormalTok{greater}
+\CommentTok{# greater = get_echoln(a_mbn)}
+\CommentTok{# greater}
+\CommentTok{# }
+\CommentTok{# lesser = get_echoln(a_mln)}
+\CommentTok{# lesser}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-##      [,1] [,2]
-## [1,]    1    2
-## [2,]    0    1
-## [3,]    0    0
-## [4,]    0    0
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{lesser =}\StringTok{ }\KeywordTok{get_echoln}\NormalTok{(a_mln)}
-\NormalTok{lesser}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-##      [,1] [,2] [,3] [,4]
-## [1,]    1    2    3  4.0
-## [2,]    0    1    2  3.5
-\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -316,32 +311,19 @@ A?}\label{what-is-the-rank-of-the-matrix-a}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{r2 =}\StringTok{ }\KeywordTok{ranking}\NormalTok{(greater)}
-\NormalTok{r2}
+\CommentTok{# r2 = ranking(greater)}
+\CommentTok{# r2}
+\CommentTok{# }
+\CommentTok{# r3 = ranking(lesser)}
+\CommentTok{# r3}
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## [1] 2
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{r3 =}\StringTok{ }\KeywordTok{ranking}\NormalTok{(lesser)}
-\NormalTok{r3}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] 2
-\end{verbatim}
-
-\hypertarget{given-an-mtimesn-matrix-where-m-n-what-can-be-the-maximum-rank-the-minimum-rank-assuming-that-the-matrix-is-non-zero}{%
-\subsubsection{\texorpdfstring{(2) Given an
-\texttt{\$m\textbackslash{}timesn\$} matrix where m \textgreater{} n,
-what can be the maximum rank? The minimum rank, assuming that the matrix
-is
-non-zero?}{(2) Given an \$m\textbackslash timesn\$ matrix where m \textgreater{} n, what can be the maximum rank? The minimum rank, assuming that the matrix is non-zero?}}\label{given-an-mtimesn-matrix-where-m-n-what-can-be-the-maximum-rank-the-minimum-rank-assuming-that-the-matrix-is-non-zero}}
+\hypertarget{given-an-mtimes-n-matrix-where-m-n-what-can-be-the-maximum-rank-the-minimum-rank-assuming-that-the-matrix-is-non-zero}{%
+\subsubsection{\texorpdfstring{(2) Given an \(`m\times n`\) matrix where
+m \textgreater{} n, what can be the maximum rank? The minimum rank,
+assuming that the matrix is
+non-zero?}{(2) Given an `m\textbackslash times n` matrix where m \textgreater{} n, what can be the maximum rank? The minimum rank, assuming that the matrix is non-zero?}}\label{given-an-mtimes-n-matrix-where-m-n-what-can-be-the-maximum-rank-the-minimum-rank-assuming-that-the-matrix-is-non-zero}}
 
 \begin{itemize}
 \item
@@ -356,7 +338,7 @@ non-zero?}{(2) Given an \$m\textbackslash timesn\$ matrix where m \textgreater{}
 \subsubsection{(3) What is the rank of matrix
 B?}\label{what-is-the-rank-of-matrix-b}}
 
-\(\begin{bmatrix} 1 & 2 & 1 \\ 3 & 6 & 3 \\ 2 & 4 & 2 \end{bmatrix}\)
+\[\begin{bmatrix} 1 & 2 & 1 \\ 3 & 6 & 3 \\ 2 & 4 & 2 \end{bmatrix}\]
 
 \begin{Shaded}
 \begin{Highlighting}[]

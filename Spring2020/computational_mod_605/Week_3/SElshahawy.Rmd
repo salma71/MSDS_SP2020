@@ -19,9 +19,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 $$\begin{bmatrix} 1 & 2 & 3 & 4 \\ -1 & 0 & 1 & 3 \\ 0 & 1 & -2 & 1 \\ 5 & 4 & -2 & -3 \end{bmatrix}$$
 For this problem, I decided to implement a function to calculate the row reduced matrix and the rank to practice my coding skills. I implemented a generic function to calculate any $`m\times n`$. I have three cases for ranking a matrix as following:
-+ m > n
-+ m < n
-+ Finally m = n
+  
+  1. m > n
+  2. m < n
+  3. Finally m = n
 
 Those were the edge cases we need to work on to built the function. 
 
@@ -136,11 +137,11 @@ r1
 # r3
 ```
 
-### (2) Given an `$m\timesn$` matrix where m > n, what can be the maximum rank? The minimum rank, assuming that the matrix is non-zero?
+### (2) Given an $`m\times n`$ matrix where m > n, what can be the maximum rank? The minimum rank, assuming that the matrix is non-zero?
 
-+ If m is greater than n, then the maximum rank of the matrix is **n** _(number of columns)_.
+  * If m is greater than n, then the maximum rank of the matrix is **n** _(number of columns)_.
 
-+ If m is less than n, then the maximum rank of the matrix is **m** _(number of rows)_.
+  * If m is less than n, then the maximum rank of the matrix is **m** _(number of rows)_.
 
 ### (3) What is the rank of matrix B?
 
