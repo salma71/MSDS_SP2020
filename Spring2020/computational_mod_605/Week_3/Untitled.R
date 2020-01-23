@@ -1,5 +1,5 @@
 a <- matrix(c(1,2,3,4,
-              -1,0,1,3), 4, byrow=T)
+              -1,0,1,3), 2, byrow=T)
 # a <- matrix(c(0,1,2,1,2,7,2,1,8), ncol = 3)
 a
 
@@ -43,7 +43,7 @@ get_U <- function(a) {
           mplier = U[[j,i]]/U[[i,i]]
           # reduce by reduction and subtitute in the U matrix
           U[j,] = U[j,] - mplier * U[i,]
-        } else if (j == i) {
+        } else if (U[j,i] != 0 & j == i) {
           U[j,] = U[j,] / U[[j,i]]
         }# end if
       } # end if 
@@ -86,17 +86,24 @@ get_U <- function(a) {
 
 c = get_U(a)
 c
-# inter = function(cd) {
-#   rank = 0
-#   sol = as.array(colSums(cd))
-#   # [1]  1  3  6 10
-#   for (i in 1:length(sol)) {
-#     if(sol[i] != 0) {
-#       rank = rank + 1
-#     }
-#   }
-#   return(rank)
-# }
-# 
-# d = inter(c)
-# d
+
+ranking = function(cd) {
+  rank = 0
+  # sol = as.array(colSums(cd))
+  # [1]  1  3  6 10
+  for (i in 1:nrow(cd)) {
+    if(sum(cd[i,]) > 0 & ncol(cd) == nrow(cd)) {
+      rank = rank + 1
+    } else if (sum(cd[i,]) > 0 & ncol(cd) > nrow(cd)) {
+      rank = rank + 1
+      # rank = max(nrow(cd), rank)
+    } else if (sum(cd[i,]) > 0 & ncol(cd) < nrow(cd)){
+      rank = rank + 1
+      # rank = max(ncol(cd), rank)    
+    }
+  }
+  return(rank)
+}
+
+d = ranking(c)
+d
