@@ -202,7 +202,7 @@ A?}\label{what-is-the-rank-of-the-matrix-a}}
 \NormalTok{          mplier =}\StringTok{ }\NormalTok{U[[j,i]]}\OperatorTok{/}\NormalTok{U[[i,i]]}
           \CommentTok{# reduce by reduction and subtitute in the U matrix}
 \NormalTok{          U[j,] =}\StringTok{ }\NormalTok{U[j,] }\OperatorTok{-}\StringTok{ }\NormalTok{mplier }\OperatorTok{*}\StringTok{ }\NormalTok{U[i,]}
-\NormalTok{        \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (j }\OperatorTok{==}\StringTok{ }\NormalTok{i) \{}
+\NormalTok{        \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (U[j,i] }\OperatorTok{!=}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\NormalTok{j }\OperatorTok{==}\StringTok{ }\NormalTok{i) \{}
 \NormalTok{          U[j,] =}\StringTok{ }\NormalTok{U[j,] }\OperatorTok{/}\StringTok{ }\NormalTok{U[[j,i]]}
 \NormalTok{        \}}\CommentTok{# end if}
 \NormalTok{      \} }\CommentTok{# end if }
@@ -289,13 +289,17 @@ A?}\label{what-is-the-rank-of-the-matrix-a}}
 \CommentTok{# rank needs to be modified}
 \NormalTok{ranking =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(cd) \{}
 \NormalTok{  rank =}\StringTok{ }\DecValTok{0}
-\NormalTok{  sol =}\StringTok{ }\KeywordTok{as.array}\NormalTok{(}\KeywordTok{colSums}\NormalTok{(cd))}
+  \CommentTok{# sol = as.array(colSums(cd))}
   \CommentTok{# [1]  1  3  6 10}
-  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{length}\NormalTok{(sol)) \{}
-    \ControlFlowTok{if}\NormalTok{(sol[i] }\OperatorTok{!=}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\KeywordTok{ncol}\NormalTok{(cd) }\OperatorTok{<=}\StringTok{ }\KeywordTok{nrow}\NormalTok{(cd)) \{}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\KeywordTok{nrow}\NormalTok{(cd)) \{}
+    \ControlFlowTok{if}\NormalTok{(}\KeywordTok{sum}\NormalTok{(cd[i,]) }\OperatorTok{>}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\KeywordTok{ncol}\NormalTok{(cd) }\OperatorTok{==}\StringTok{ }\KeywordTok{nrow}\NormalTok{(cd)) \{}
 \NormalTok{      rank =}\StringTok{ }\NormalTok{rank }\OperatorTok{+}\StringTok{ }\DecValTok{1}
-\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (sol[i] }\OperatorTok{!=}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\KeywordTok{ncol}\NormalTok{(cd) }\OperatorTok{>}\StringTok{ }\KeywordTok{nrow}\NormalTok{(cd)) \{}
-\NormalTok{      rank =}\StringTok{ }\KeywordTok{nrow}\NormalTok{(cd)}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{sum}\NormalTok{(cd[i,]) }\OperatorTok{>}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\KeywordTok{ncol}\NormalTok{(cd) }\OperatorTok{>}\StringTok{ }\KeywordTok{nrow}\NormalTok{(cd)) \{}
+\NormalTok{      rank =}\StringTok{ }\NormalTok{rank }\OperatorTok{+}\StringTok{ }\DecValTok{1}
+      \CommentTok{# rank = max(nrow(cd), rank)}
+\NormalTok{    \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (}\KeywordTok{sum}\NormalTok{(cd[i,]) }\OperatorTok{>}\StringTok{ }\DecValTok{0} \OperatorTok{&}\StringTok{ }\KeywordTok{ncol}\NormalTok{(cd) }\OperatorTok{<}\StringTok{ }\KeywordTok{nrow}\NormalTok{(cd))\{}
+\NormalTok{      rank =}\StringTok{ }\NormalTok{rank }\OperatorTok{+}\StringTok{ }\DecValTok{1}
+      \CommentTok{# rank = max(ncol(cd), rank)    }
 \NormalTok{    \}}
 \NormalTok{  \}}
   \KeywordTok{return}\NormalTok{(rank)}
@@ -332,11 +336,142 @@ A?}\label{what-is-the-rank-of-the-matrix-a}}
 ## [1] 2
 \end{verbatim}
 
-\hypertarget{given-an-mtimes-matrix-where-m-n-what-can-be-the-maximum-rank-the-mini--mum-rank-assuming-that-the-matrix-is-non-zero}{%
-\subsubsection{\texorpdfstring{(2) Given an \(m\times\) matrix where m
-\textgreater{} n, what can be the maximum rank? The mini- mum rank,
-assuming that the matrix is
-non-zero?}{(2) Given an m\textbackslash times matrix where m \textgreater{} n, what can be the maximum rank? The mini- mum rank, assuming that the matrix is non-zero?}}\label{given-an-mtimes-matrix-where-m-n-what-can-be-the-maximum-rank-the-mini--mum-rank-assuming-that-the-matrix-is-non-zero}}
+\hypertarget{given-an-mtimesn-matrix-where-m-n-what-can-be-the-maximum-rank-the-minimum-rank-assuming-that-the-matrix-is-non-zero}{%
+\subsubsection{\texorpdfstring{(2) Given an
+\texttt{\$m\textbackslash{}timesn\$} matrix where m \textgreater{} n,
+what can be the maximum rank? The minimum rank, assuming that the matrix
+is
+non-zero?}{(2) Given an \$m\textbackslash timesn\$ matrix where m \textgreater{} n, what can be the maximum rank? The minimum rank, assuming that the matrix is non-zero?}}\label{given-an-mtimesn-matrix-where-m-n-what-can-be-the-maximum-rank-the-minimum-rank-assuming-that-the-matrix-is-non-zero}}
+
+\begin{itemize}
+\item
+  If m is greater than n, then the maximum rank of the matrix is
+  \textbf{n} \emph{(number of columns)}.
+\item
+  If m is less than n, then the maximum rank of the matrix is \textbf{m}
+  \emph{(number of rows)}.
+\end{itemize}
+
+\hypertarget{what-is-the-rank-of-matrix-b}{%
+\subsubsection{(3) What is the rank of matrix
+B?}\label{what-is-the-rank-of-matrix-b}}
+
+\(\begin{bmatrix} 1 & 2 & 1 \\ 3 & 6 & 3 \\ 2 & 4 & 2 \end{bmatrix}\)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{B <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}
+              \DecValTok{3}\NormalTok{,}\DecValTok{6}\NormalTok{,}\DecValTok{3}\NormalTok{,}
+              \DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{2}\NormalTok{), }\DecValTok{3}\NormalTok{, }\DataTypeTok{byrow =}\NormalTok{ T)}
+
+\NormalTok{B}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    1    2    1
+## [2,]    3    6    3
+## [3,]    2    4    2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{B_echoln =}\StringTok{ }\KeywordTok{get_echoln}\NormalTok{(B)}
+\NormalTok{B_echoln}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    1    2    1
+## [2,]    0    0    0
+## [3,]    0    0    0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{B_rank =}\StringTok{ }\KeywordTok{ranking}\NormalTok{(B_echoln)}
+\NormalTok{B_rank}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+
+\hypertarget{problem-set_2}{%
+\subsection{Problem set\_2}\label{problem-set_2}}
+
+Compute the eigenvalues and eigenvectors of the matrix A. You'll need to
+show your work. You'll need to write out the characteristic polynomial
+and show your solution.
+
+\[\begin{bmatrix} 1 & 2 & 3 \\ 0 & 4 & 5 \\ 0 & 0 & 6 \end{bmatrix}\]
+
+\textbf{Steps to solution:-}
+
+\[ A = \begin{bmatrix}1 & 2 & 3 \\0 & 4 & 5 \\0 & 0 & 6 \end{bmatrix}\]
+\[ \lambda\,I_3 = \begin{bmatrix}\lambda & 0 & 0 \\0 & \lambda & 0 \\0 & 0 & \lambda \end{bmatrix}\]
+\[ det(A-\lambda\,I_n)=0\]
+\[ det\,\begin{bmatrix}1-\lambda & 2 & 3 \\0 & 4-\lambda & 5 \\0 & 0 & 6-\lambda \end{bmatrix} = 0\]
+\[(1-\lambda)(4-\lambda)(6-\lambda)=0\] \[ Eigenvalues\,of\,A:\]
+\[\lambda=1,\, \lambda=4,\, \lambda=6\]
+
+Eigenvectors:\\
+\[\lambda=1\]
+\[ \begin{bmatrix}1-\lambda & 2 & 3 \\0 & 4-\lambda & 5 \\0 & 0 & 6-\lambda \end{bmatrix}\]
+
+\[ \begin{bmatrix}0 & 2 & 3 \\0 & 3 & 5\\0 & 0 & 5\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0\]
+
+\[The\,first\,pivot\,is\,0.\,x_1 = free.\,Let\,the\,value=1.\]
+
+\[3 x_2 + 5 x_3 = 0 \,and\, 5 x_3 = 0\]
+
+\[x_{\lambda=1}\,=\begin{bmatrix}1 \\0 \\0\end{bmatrix}\]
+
+\[\lambda=4\]
+\[ \begin{bmatrix}-3 & 2 & 3 \\0 & 0 & 5\\0 & 0 & 2\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0\]
+\[Second\,pivot\,is\, 0.\,x_2=free.\,Let\,the\,value=1.\]
+\[-3x_1+2x_2 +3x_3 = 0\,and\, 2x_3 = 0\] \[x_3=0,\,x_2=1\,and\,x_1=2/3\]
+\[x_{\lambda=4}\,=\begin{bmatrix}2/3\\1 \\0\end{bmatrix}\]
+
+\[\lambda=6\]
+\[ \begin{bmatrix}-5 & 2 & 3\\0 & -2 & 5\\0 & 0 & 0\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0\]
+\[Third\,pivot\,is\, 0.\,x_3=free.\,Let\,the\,value=1.\]
+\[-5x_1 +2x_2 +3x_3 = 0 and, -2x_1+5x_3 = 0\]
+\[x_3 = 1,\,x_2 = 5/2,\,and\,x_1=8/5\]
+
+\[x_{\lambda=6}\,=\begin{bmatrix}8/5 \\5/2 \\1\end{bmatrix}\]
+
+Confirm with buit-in function in r
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{A <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{0}\NormalTok{,}\DecValTok{0}\NormalTok{,}
+                     \DecValTok{2}\NormalTok{,}\DecValTok{4}\NormalTok{,}\DecValTok{0}\NormalTok{,}
+                     \DecValTok{3}\NormalTok{,}\DecValTok{5}\NormalTok{,}\DecValTok{6}\NormalTok{), }\DataTypeTok{nrow =} \DecValTok{3}\NormalTok{, }\DataTypeTok{ncol =} \DecValTok{3}\NormalTok{, }\DataTypeTok{byrow =} \OtherTok{FALSE}\NormalTok{)}
+\NormalTok{A}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      [,1] [,2] [,3]
+## [1,]    1    2    3
+## [2,]    0    4    5
+## [3,]    0    0    6
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eign_A <-}\StringTok{ }\NormalTok{(}\KeywordTok{eigen}\NormalTok{(A))}\OperatorTok{$}\NormalTok{values}
+\NormalTok{eign_A}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 6 4 1
+\end{verbatim}
 
 
 \end{document}

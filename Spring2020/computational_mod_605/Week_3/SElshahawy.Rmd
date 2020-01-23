@@ -104,8 +104,7 @@ greater
 lesser = get_echoln(a_mln)
 lesser
 ```
-```{r warning=False, message=False}
-
+```{r message=FALSE, warning=FALSE}
 # rank needs to be modified
 ranking = function(cd) {
   rank = 0
@@ -135,7 +134,7 @@ r3 = ranking(lesser)
 r3
 ```
 
-### (2) Given an $m\timesn$ matrix where m > n, what can be the maximum rank? The minimum rank, assuming that the matrix is non-zero?
+### (2) Given an `$m\timesn$` matrix where m > n, what can be the maximum rank? The minimum rank, assuming that the matrix is non-zero?
 
 + If m is greater than n, then the maximum rank of the matrix is **n** _(number of columns)_.
 
@@ -158,5 +157,59 @@ B_rank = ranking(B_echoln)
 B_rank
 ```
 
+## Problem set_2
+
+Compute the eigenvalues and eigenvectors of the matrix A. You’ll need to show your
+work. You’ll need to write out the characteristic polynomial and show your solution.
+
+$$\begin{bmatrix} 1 & 2 & 3 \\ 0 & 4 & 5 \\ 0 & 0 & 6 \end{bmatrix}$$
+
+**Steps to solution:-**
+
+$$ A = \begin{bmatrix}1 & 2 & 3 \\0 & 4 & 5 \\0 & 0 & 6 \end{bmatrix}$$ 
+$$ \lambda\,I_3 = \begin{bmatrix}\lambda & 0 & 0 \\0 & \lambda & 0 \\0 & 0 & \lambda \end{bmatrix}$$ 
+$$ det(A-\lambda\,I_n)=0$$ 
+$$ det\,\begin{bmatrix}1-\lambda & 2 & 3 \\0 & 4-\lambda & 5 \\0 & 0 & 6-\lambda \end{bmatrix} = 0$$ 
+$$(1-\lambda)(4-\lambda)(6-\lambda)=0$$
+$$ Eigenvalues\,of\,A:$$
+$$\lambda=1,\, \lambda=4,\, \lambda=6$$
+   
+Eigenvectors:   
+$$\lambda=1$$
+$$ \begin{bmatrix}1-\lambda & 2 & 3 \\0 & 4-\lambda & 5 \\0 & 0 & 6-\lambda \end{bmatrix}$$ 
+    
+$$ \begin{bmatrix}0 & 2 & 3 \\0 & 3 & 5\\0 & 0 & 5\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0$$ 
+
+$$The\,first\,pivot\,is\,0.\,x_1 = free.\,Let\,the\,value=1.$$   
+
+$$3 x_2 + 5 x_3 = 0 \,and\, 5 x_3 = 0$$
+
+$$x_{\lambda=1}\,=\begin{bmatrix}1 \\0 \\0\end{bmatrix}$$
+    
+$$\lambda=4$$
+$$ \begin{bmatrix}-3 & 2 & 3 \\0 & 0 & 5\\0 & 0 & 2\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0$$
+$$Second\,pivot\,is\, 0.\,x_2=free.\,Let\,the\,value=1.$$
+$$-3x_1+2x_2 +3x_3 = 0\,and\, 2x_3 = 0$$
+$$x_3=0,\,x_2=1\,and\,x_1=2/3$$
+$$x_{\lambda=4}\,=\begin{bmatrix}2/3\\1 \\0\end{bmatrix}$$
+   
+$$\lambda=6$$
+$$ \begin{bmatrix}-5 & 2 & 3\\0 & -2 & 5\\0 & 0 & 0\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0$$ 
+$$Third\,pivot\,is\, 0.\,x_3=free.\,Let\,the\,value=1.$$
+$$-5x_1 +2x_2 +3x_3 = 0 and, -2x_1+5x_3 = 0$$
+$$x_3 = 1,\,x_2 = 5/2,\,and\,x_1=8/5$$
+
+$$x_{\lambda=6}\,=\begin{bmatrix}8/5 \\5/2 \\1\end{bmatrix}$$
+
+Confirm with buit-in function in r
+```{r}
+
+A <- matrix(data = c(1,0,0,
+                     2,4,0,
+                     3,5,6), nrow = 3, ncol = 3, byrow = FALSE)
+A
+eign_A <- (eigen(A))$values
+eign_A
+```
 
 
