@@ -80,41 +80,48 @@ Set up a system of equations with 3 variables and 3 constraints and solve for x.
 Please test it with the system below and it should produce a solution x = [−1.55, −0.32, 0.95]
 
 $$\begin{bmatrix} 1 & 1 & 3 \\ 2 & -1 & 5 \\ -1 & -2 & 4 \end{bmatrix}\quad \cdot \quad \begin{bmatrix} { x }_{ 1 } \\ { x }_{ 2 } \\ { x }_{ 3 } \end{bmatrix}\quad =\quad \begin{bmatrix} 1 \\ 2 \\ 6 \end{bmatrix}$$
+I applied a computer algorithm to solve that problem. 
 
+  + The algorithm does apply only on a square matrix. 
 
 ```{r}
 calculate_gauss <- function(a, b) {
   n <- nrow(a)
-  # search for the position of the maximum element in the matrix for each column diagonally.
-  for (i in seq_len(n - 1)) {
-    j <- which.max(a[i:n, i]) + i - 1 # pointer to the new index of max. element in a column
-    if (j != i) {
+  m <- ncol(a)
+ # iterate over the matrix and if we hit a zero entry pivot
+ # swap the rows, moving the  zero into the lower row
+  for (i in 1:n) {
+    j <- which.max(a[i:n, i]) + i - 1
+    if (a[i, i] == 0) {
       a[c(i, j), i:n] <- a[c(j, i), i:n]
-      # swap the two elements
       b[c(i, j), ] <- b[c(j, i), ]
     }
-  # find the multiplier to eliminate - iterate over the submatrix 
-    k <- seq(i + 1, n)
-    for (j in k) {
-      # find the multiplier
-      s <- a[[j, i]] / a[[i, i]]
-      # multiply s to the 2nd row then subtract from the first -> substitute in the second 
-      a[j, k] <- a[j, k] - s * a[i, k]
-      b[j, ] <- b[j, ] - s * b[i, ]
-    }
+  
+    # Then iterate over each row and get the pivot element (which is not equal to zero)
+    # After that eliminate to get a lower triangle. <Rj = Rj - multiplier * Ri>
+    # all elements unter the pivot should be equal to zero
+    
+      for (k in 2:m) {
+          if(a[k,i] != 0 & k > i) {
+            s <- a[k, i] / a[i, i] 
+            a[k, ] <- a[k, ] - s * a[i, ]
+            # do the same for the other vector
+            b[k, ] <- b[k, ] - s * b[i, ]
+          }
+        }
   }
   
-  # backword solve
+  # Back substitute in backwords (ground-up)
   for (i in seq(n, 1)) {
     if (i < n) {
       for (j in seq(i + 1, n)) {
-        b[i, ] <- b[i, ] - a[[i, j]] * b[j, ]
+        b[i, ] <- b[i, ] - a[i, j] * b[j, ]
       }
     }
-    b[i, ] <- b[i, ] / a[[i, i]]
+    b[i, ] <- b[i, ] / a[i, i]
   }
   
-  return(x=b)
+  return(round(x=b, digits = 2))
 }
 a <- matrix(c(1,2,-1,1,-1,-2,3,5,4), nrow = 3, ncol = 3)
 b <- matrix(c(1,2,6), nrow = 3, ncol = 1)

@@ -1,0 +1,62 @@
+---
+title: "Descussion_W1(Solving system of linear Equation using matrices)"
+author: "Salma Elshahawy"
+date: "1/29/2020"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction 
+
+For this week's discussion, I choose to interpret how to solve a system of linear equations using the Gaussian elimination method. I picked the example from Gerbert Strang's book ( Linear Algebra and its applications - 2nd edition ).  
+
+## Understanding the Math
+
+The way to understand elimination is by example. We begin in three dimensions equations:
+
+$$2u\quad +\quad v\quad +\quad w\quad =\quad 5\\4u\quad -\quad 6v\quad \quad \quad \quad \quad =\quad -2\\ -2u+7v+\quad 2w\quad =\quad 9$$
+The problem is to find the unknown values of u, v, and w, and we shall apply Gaussian elimination.
+
+The method starts by subtracting multiples of the first equation from the other equations. The goal is to
+eliminate $u\quad$ from the last two equations. Which means that **2** is the pivot or the entry point to eliminate. The first step is to combine the coefficients of the equations into an augmented matrix as below: 
+
+$$\begin{bmatrix} 2 & 1 & 1 & 5 \\ 4 & -6 & 0 & -2 \\ -2 & 7 & 2 & 9 \end{bmatrix}$$
+Leave the first row as it is and start from the following row in the matrix. Divide the first element in the second row by the first element in the first row. Subtract the first row from the second one in the second. More is merely subtract 2 times the first equation from the second. Finally, repeat until you finish the rows. 
+
+$$\begin{bmatrix} 2 & 1 & 1 & 5 \\ 4 & -6 & 0 & -2 \\ -2 & 7 & 2 & 9 \end{bmatrix}\quad \Longrightarrow \quad \begin{bmatrix} 2 & 1 & 1 & 5 \\ 0 & -8 & -2 & -12 \\ 0 & 8 & 3 & 14 \end{bmatrix}\quad \Longrightarrow \quad \begin{bmatrix} 2 & 1 & 1 & 5 \\ 0 & -8 & -2 & -12 \\ 0 & 0 & 1 & 2 \end{bmatrix}$$
+
+## The solution 
+
+Now we got that $w\quad$ = 2. Hence you can solve the backward from bottom to top to get the other values $u\quad$ and $v\quad$.
+
+Substituting into the second equation, we find $v\quad$ = 1. Then the first equation gives $u\quad$ = 1. 
+This process is called back-substitution. Back-substitution generates the complete solution in opposite order-beginning with the last unknown, then solving for the next to last, and eventually for the first.
+By definition, pivots cannot be zero. We need to divide by them.
+
+## The challenge
+
+The challenge here is that if the first element in the matrix is zero ( pivot element ), the elimination has to stop. The elimination then will be impossible to complete.  
+
+
+
+
+
+
+
+
+
+
+
