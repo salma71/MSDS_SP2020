@@ -2836,22 +2836,23 @@ rad2deg(acos(cos_theta))</code></pre>
 <pre class="r"><code>calculate_gauss &lt;- function(a, b) {
     n &lt;- nrow(a)
     m &lt;- ncol(a)
-    # iterate over the matrix and if we hit a zero entry pivot swap the rows,
-    # moving the zero into the lower row
+    # iterate over the matrix and
     for (i in 1:n) {
         j &lt;- which.max(a[i:n, i]) + i - 1
+        # if we hit a zero entry pivot
         if (a[i, i] == 0) {
+            # swap the rows, moving the zero into the lower row
             a[c(i, j), i:n] &lt;- a[c(j, i), i:n]
             b[c(i, j), ] &lt;- b[c(j, i), ]
         }
         
         # Then iterate over each row and get the pivot element (which is not equal
-        # to zero) After that eliminate to get a lower triangle. &lt;Rj = Rj -
-        # multiplier * Ri&gt; all elements unter the pivot should be equal to zero
-        
+        # to zero)
         for (k in 2:m) {
             if (a[k, i] != 0 &amp; k &gt; i) {
                 s &lt;- a[k, i]/a[i, i]
+                # After that eliminate to get a lower triangle. &lt;Rj = Rj - multiplier * Ri&gt;
+                # all elements unter the pivot should be equal to zero
                 a[k, ] &lt;- a[k, ] - s * a[i, ]
                 # do the same for the other vector
                 b[k, ] &lt;- b[k, ] - s * b[i, ]
