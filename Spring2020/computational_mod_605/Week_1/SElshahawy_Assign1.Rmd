@@ -83,27 +83,28 @@ $$\begin{bmatrix} 1 & 1 & 3 \\ 2 & -1 & 5 \\ -1 & -2 & 4 \end{bmatrix}\quad \cdo
 I applied a computer algorithm to solve that problem. 
 
   + The algorithm does apply only on a square matrix. 
+  
 
 ```{r}
 calculate_gauss <- function(a, b) {
   n <- nrow(a)
   m <- ncol(a)
- # iterate over the matrix and if we hit a zero entry pivot
- # swap the rows, moving the  zero into the lower row
+ # iterate over the matrix and 
   for (i in 1:n) {
     j <- which.max(a[i:n, i]) + i - 1
+     # if we hit a zero entry pivot
     if (a[i, i] == 0) {
+     # swap the rows, moving the  zero into the lower row
       a[c(i, j), i:n] <- a[c(j, i), i:n]
       b[c(i, j), ] <- b[c(j, i), ]
     }
   
     # Then iterate over each row and get the pivot element (which is not equal to zero)
-    # After that eliminate to get a lower triangle. <Rj = Rj - multiplier * Ri>
-    # all elements unter the pivot should be equal to zero
-    
       for (k in 2:m) {
           if(a[k,i] != 0 & k > i) {
             s <- a[k, i] / a[i, i] 
+        # After that eliminate to get a lower triangle. <Rj = Rj - multiplier * Ri>
+        # all elements unter the pivot should be equal to zero
             a[k, ] <- a[k, ] - s * a[i, ]
             # do the same for the other vector
             b[k, ] <- b[k, ] - s * b[i, ]
@@ -131,6 +132,17 @@ val
 
 ```
 
-### References
+Try the function when the pivot is equal to zero 
+
+```{r}
+zero_pivot <- matrix(c(0,2,-1,1,-1,-2,3,5,4), nrow = 3, ncol = 3)
+res <- matrix(c(1,2,6), nrow = 3, ncol = 1)
+
+val_2 <- calculate_gauss(zero_pivot,res)
+val_2
+```
+
+
+# References
   + [Github repo](https://github.com/salma71/MSDS_SP2020/tree/master/Spring2020/computational_mod_605/Week_1) 
 

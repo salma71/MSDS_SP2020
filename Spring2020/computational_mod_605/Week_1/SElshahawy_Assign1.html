@@ -2829,51 +2829,73 @@ rad2deg(acos(cos_theta))</code></pre>
 <h1>Problem set-2</h1>
 <p>Set up a system of equations with 3 variables and 3 constraints and solve for x. Please write a function in R that will take two variables (matrix A &amp; constraint vector b) and solve using elimination. Your function should produce the right answer for the system of equations for any 3-variable, 3-equation system. You don’t have to worry about degenerate cases and can safely assume that the function will only be tested with a system of equations that has a solution. Please note that you do have to worry about zero pivots, though. Please note that you should not use the built-in function solve to solve this system or use matrix inverses. The approach that you should employ is to construct an Upper Triangular Matrix and then back-substitute to get the solution. Alternatively, you can augment the matrix A with vector b and jointly apply the Gauss Jordan elimination procedure.</p>
 <p>Please test it with the system below and it should produce a solution x = [−1.55, −0.32, 0.95]</p>
-<p><span class="math display">\[\begin{bmatrix} 1 &amp; 1 &amp; 3 \\ 2 &amp; -1 &amp; 5 \\ -1 &amp; -2 &amp; 4 \end{bmatrix}\quad \cdot \quad \begin{bmatrix} { x }_{ 1 } \\ { x }_{ 2 } \\ { x }_{ 3 } \end{bmatrix}\quad =\quad \begin{bmatrix} 1 \\ 2 \\ 6 \end{bmatrix}\]</span></p>
+<p><span class="math display">\[\begin{bmatrix} 1 &amp; 1 &amp; 3 \\ 2 &amp; -1 &amp; 5 \\ -1 &amp; -2 &amp; 4 \end{bmatrix}\quad \cdot \quad \begin{bmatrix} { x }_{ 1 } \\ { x }_{ 2 } \\ { x }_{ 3 } \end{bmatrix}\quad =\quad \begin{bmatrix} 1 \\ 2 \\ 6 \end{bmatrix}\]</span> I applied a computer algorithm to solve that problem.</p>
+<ul>
+<li>The algorithm does apply only on a square matrix.</li>
+</ul>
 <pre class="r"><code>calculate_gauss &lt;- function(a, b) {
     n &lt;- nrow(a)
-    # search for the position of the maximum element in the matrix for each
-    # column diagonally.
-    for (i in seq_len(n - 1)) {
-        j &lt;- which.max(a[i:n, i]) + i - 1  # pointer to the new index of max. element in a column
-        if (j != i) {
+    m &lt;- ncol(a)
+    # iterate over the matrix and if we hit a zero entry pivot swap the rows,
+    # moving the zero into the lower row
+    for (i in 1:n) {
+        j &lt;- which.max(a[i:n, i]) + i - 1
+        if (a[i, i] == 0) {
             a[c(i, j), i:n] &lt;- a[c(j, i), i:n]
-            # swap the two elements
             b[c(i, j), ] &lt;- b[c(j, i), ]
         }
-        # find the multiplier to eliminate - iterate over the submatrix
-        k &lt;- seq(i + 1, n)
-        for (j in k) {
-            # find the multiplier
-            s &lt;- a[[j, i]]/a[[i, i]]
-            # multiply s to the 2nd row then subtract from the first -&gt; substitute in
-            # the second
-            a[j, k] &lt;- a[j, k] - s * a[i, k]
-            b[j, ] &lt;- b[j, ] - s * b[i, ]
+        
+        # Then iterate over each row and get the pivot element (which is not equal
+        # to zero) After that eliminate to get a lower triangle. &lt;Rj = Rj -
+        # multiplier * Ri&gt; all elements unter the pivot should be equal to zero
+        
+        for (k in 2:m) {
+            if (a[k, i] != 0 &amp; k &gt; i) {
+                s &lt;- a[k, i]/a[i, i]
+                a[k, ] &lt;- a[k, ] - s * a[i, ]
+                # do the same for the other vector
+                b[k, ] &lt;- b[k, ] - s * b[i, ]
+            }
         }
     }
     
-    # backword solve
+    # Back substitute in backwords (ground-up)
     for (i in seq(n, 1)) {
         if (i &lt; n) {
             for (j in seq(i + 1, n)) {
-                b[i, ] &lt;- b[i, ] - a[[i, j]] * b[j, ]
+                b[i, ] &lt;- b[i, ] - a[i, j] * b[j, ]
             }
         }
-        b[i, ] &lt;- b[i, ]/a[[i, i]]
+        b[i, ] &lt;- b[i, ]/a[i, i]
     }
     
-    return(x = b)
+    return(round(x = b, digits = 2))
 }
 a &lt;- matrix(c(1, 2, -1, 1, -1, -2, 3, 5, 4), nrow = 3, ncol = 3)
 b &lt;- matrix(c(1, 2, 6), nrow = 3, ncol = 1)
 
 val &lt;- calculate_gauss(a, b)
 val</code></pre>
-<pre><code>           [,1]
-[1,] -1.5454545
-[2,] -0.3181818
-[3,]  0.9545455</code></pre>
+<pre><code>      [,1]
+[1,] -1.55
+[2,] -0.32
+[3,]  0.95</code></pre>
+<p>Try the function when the pivot is equal to zero</p>
+<pre class="r"><code>zero_pivot &lt;- matrix(c(0, 2, -1, 1, -1, -2, 3, 5, 4), nrow = 3, ncol = 3)
+res &lt;- matrix(c(1, 2, 6), nrow = 3, ncol = 1)
+
+val_2 &lt;- calculate_gauss(zero_pivot, res)
+val_2</code></pre>
+<pre><code>      [,1]
+[1,] -1.21
+[2,] -1.04
+[3,]  0.68</code></pre>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<ul>
+<li><a href="https://github.com/salma71/MSDS_SP2020/tree/master/Spring2020/computational_mod_605/Week_1">Github repo</a></li>
+</ul>
 </div>
 
 
