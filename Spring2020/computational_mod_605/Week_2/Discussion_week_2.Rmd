@@ -1,0 +1,73 @@
+---
+title: "Inverse of a Matrix-Discussion week 2"
+author: "Salma Elshahawy"
+date: "2/4/2020"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+I tried to solve the problem C19 - page 205 - A First course in Linear Algebra by Rober A. Beezer. 
+
+The question asks to find the inverse of a matrix if exits and verifying it.  
+
+I solved the problem using hand and verify the solution using matlib package in r to get the inverse. 
+
+We know that AI = inv(A)
+
+## 1
+
+We need to multiply by the Identy matrix to find the inverse in an augmented matrix
+
+$$\left\{ { \begin{matrix} 1 & 3 & 1 \\ 0 & 2 & 1 \\ 2 & 2 & 1 \end{matrix} }|{ \begin{matrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{matrix} } \right\} \quad $$
+
+## 2
+
+Determine the pivot entry point, which is in this case is 1. We need to eleminate elements under the pivot using the Upper triangle and lower triangle method. 
+
+$${ pivot }_{ 1 }\quad =\quad 1\\ { multiplier }_{ 1 }\quad =\quad \frac { 2 }{ 1 } \\ R3\quad =\quad R3\quad -\quad { multiplier }_{ 1 }\quad \times \quad R1\\ { pivot }_{ 2 }\quad =\quad 2\\ { multiplier }_{ 2 }\quad =\quad \frac { -4 }{ 2 } \\ R3\quad =\quad R3\quad -\quad { multiplier }_{ 1 }\quad \times \quad R1\\ \left\{ { \begin{matrix} 1 & 3 & 1 \\ 0 & 2 & 1 \\ 0 & -4 & -1 \end{matrix} }|{ \begin{matrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ -2 & 0 & 1 \end{matrix} } \right\} \quad \Longrightarrow \quad \left\{ { \begin{matrix} 1 & 3 & 1 \\ 0 & 2 & 1 \\ 0 & 0 & 1 \end{matrix} }|{ \begin{matrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ -2 & 2 & 1 \end{matrix} } \right\} $$
+
+$${ pivot }_{ 3 }\quad =\quad 1$$
+
+## 3
+
+We eliminate the elements above the pivots  - Lower triangle. 
+
+$$\left\{ { \begin{matrix} 1 & 3 & 1 \\ 0 & 2 & 1 \\ 0 & 0 & 1 \end{matrix} }|{ \begin{matrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ -2 & 2 & 1 \end{matrix} } \right\} \quad \Longrightarrow \quad \left\{ { \begin{matrix} 1 & 0 & \frac { -1 }{ 2 }  \\ 0 & 2 & 1 \\ 0 & 0 & 1 \end{matrix} }|{ \begin{matrix} 1 & \frac { -3 }{ 2 }  & 0 \\ 0 & 1 & 0 \\ -2 & 2 & 1 \end{matrix} } \right\} $$
+
+$$divide\quad each\quad row\quad by\quad the\quad pivot\quad coeff.\\ \Longrightarrow \quad \left\{ { \begin{matrix} 1 & 0 & \frac { -1 }{ 2 }  \\ 0 & 2 & 0 \\ 0 & 0 & 1 \end{matrix} }|{ \begin{matrix} 1 & \frac { -3 }{ 2 }  & 0 \\ 2 & -1 & -1 \\ -2 & 2 & 1 \end{matrix} } \right\} \quad \Longrightarrow \quad \left\{ { \begin{matrix} 1 & 0 & 0 \\ 0 & 1 & 0 \\ 0 & 0 & 1 \end{matrix} }|{ \begin{matrix} 1 & \frac { -1 }{ 2 }  & \frac { 1 }{ 2 }  \\ 2 & -\frac { 1 }{ 2 }  & -\frac { 1 }{ 2 }  \\ -2 & 2 & 1 \end{matrix} } \right\} $$
+
+
+$$The\quad inverse\quad should\quad be\quad \\ \\ \left[ \begin{matrix} 1 & \frac { -1 }{ 2 }  & \frac { 1 }{ 2 }  \\ 2 & -\frac { 1 }{ 2 }  & -\frac { 1 }{ 2 }  \\ -2 & 2 & 1 \end{matrix} \right] $$
+
+## Validation in R
+
+To validate the handsolution, I used the `matlib` package to get the inverse in r
+
+```{r}
+library(matlib)
+a = matrix(c(1,3,1,
+             0,2,1,
+             2,2,1), nrow = 3, byrow = TRUE)
+ai <- inv(a)
+ai
+```
+
+
+
+
+
