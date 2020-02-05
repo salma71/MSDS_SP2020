@@ -80,7 +80,9 @@ Write an R function to factorize a square matrix A into LU or LDU, whichever you
 _Please submit your response in an R Markdown document using our class naming convention. You don’t have to worry about permuting rows of A and you can assume that A is less than 5x5, if you need to hard-code any variables in your code. If you doing the entire assignment in R, then please submit only one markdown document for both the problems._
 
 ```{r}
-a <- matrix(c(2,4,-2,1,-1,5,3,3,5), ncol = 3)
+a <- matrix(c(2,4,-2,
+              1,-1,5,
+              3,3,5), nrow = 3, byrow = TRUE)
 a
 
 get_UL <- function(a) {
