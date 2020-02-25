@@ -1,0 +1,92 @@
+---
+title: "SElshahawy_Assign5"
+author: "Salma Elshahawy"
+date: "2/24/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question_1
+
+Choose independently two numbers B and C at random from the interval [0, 1] with uniform density. Prove that B and C are proper probability distributions.
+
+Note that the point (B,C) is then chosen at random in the unit square. Find the probability that
+
+### (a) 
+
+B + C < 1/2
+
+```{r}
+library(ggplot2)
+set.seed(10000)
+B <- (B = runif(1000, min = 0, max = 1))
+C <- (C = runif(1000, min = 0, max = 1))
+ecdf(B)
+ecdf(C)
+```
+
+Both variables have a probability within [0-1] interval
+
+```{r}
+summation = sum(punif((B+C)<0.5, min=0, max=1)) / 1000
+summation
+```
+
+### (b) 
+
+BC < 0.5
+
+```{r}
+product = sum(punif((B*C)<0.5, min=0, max=1)) / 1000
+product
+```
+
+### (c) 
+
+|B − C| < 1/2
+
+```{r}
+subtrac = sum(punif(abs(B-C)<0.5, min=0, max=1)) / 1000
+subtrac
+```
+
+### (d)
+
+max{B,C} < 1/2.
+
+```{r}
+max_sum = sum((pmax(B,C)) < 0.5)/1000
+max_sum
+```
+
+### (e)
+
+min{B,C} < 1/2
+
+```{r}
+min_sum = sum((pmin(B,C)) < 0.5)/1000
+min_sum
+```
+
+
+
+
+
+
+
+
+
+

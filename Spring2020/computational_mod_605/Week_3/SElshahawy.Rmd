@@ -1,12 +1,18 @@
 ---
 title: "Week_3 605 assignment"
 author: "Salma Elshahawy"
-date: "1/21/2020"
+date: "2/11/2020"
 output: 
-  pdf_document: 
-    extra_dependencies: ["geometry"]
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
     latex_engine: xelatex
-    keep_tex: true
 ---
 
 ```{r setup, include=FALSE}
@@ -18,11 +24,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ### (1) What is the rank of the matrix A?
 
 $$\begin{bmatrix} 1 & 2 & 3 & 4 \\ -1 & 0 & 1 & 3 \\ 0 & 1 & -2 & 1 \\ 5 & 4 & -2 & -3 \end{bmatrix}$$
-For this problem, I decided to implement a function to calculate the row reduced matrix and the rank to practice my coding skills. I implemented a generic function to calculate any $`m\times n`$. I have three cases for ranking a matrix as following:
+For this problem, I decided to implement a function to calculate the row reduced matrix and the rank to practice my coding skills. I implemented a generic function to calculate any $`m\times n`$ matrix. I have three cases for ranking a matrix as following:
   
   1. m > n
   2. m < n
   3. Finally m = n
+
+First, I developed a genertic function to get the echoln form of the matrix $`get echoln`$ that takes a matrix of any size $`m\times n`$. 
+
 
 Those were the edge cases we need to work on to built the function. 
 
@@ -36,12 +45,14 @@ a_mEn
 ```
 
 ```{r}
+# m > n
 a_mbn <- matrix(c(1,2,3,4,
               -1,0,1,3), 4, byrow=T)
 a_mbn
 ```
 
 ```{r}
+# m < n
 a_mln <- matrix(c(1,2,3,4,
               -1,0,1,3), 2, byrow=T)
 a_mln
@@ -64,7 +75,7 @@ get_echoln <- function(a) {
         } else if (U[j,i] != 0 & j == i) {
           U[j,] = U[j,] / U[[j,i]]
         }# end if
-      } # end if 
+      } # end for 
     } # end for
   } else if(m < n) {
     for (i in 1:n) {
@@ -179,11 +190,14 @@ $$\lambda=1,\, \lambda=4,\, \lambda=6$$
    
 Eigenvectors:   
 $$\lambda=1$$
-$$ \begin{bmatrix}1-\lambda & 2 & 3 \\0 & 4-\lambda & 5 \\0 & 0 & 6-\lambda \end{bmatrix}$$ 
-    
-$$ \begin{bmatrix}0 & 2 & 3 \\0 & 3 & 5\\0 & 0 & 5\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0$$ 
+$$ \begin{bmatrix}1-\lambda & 2 & 3 \\0 & 4-\lambda & 5 \\0 & 0 & 6-\lambda \end{bmatrix}$$
 
-$$The\,first\,pivot\,is\,0.\,x_1 = free.\,Let\,the\,value=1.$$   
+
+$$ \begin{bmatrix}0 & 2 & 3 \\0 & 3 & 5\\0 & 0 & 5\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0$$
+
+
+$$The\,first\,pivot\,is\,0.\,x_1 = free.\,Let\,the\,value=1.$$
+
 
 $$3 x_2 + 5 x_3 = 0 \,and\, 5 x_3 = 0$$
 
@@ -197,22 +211,25 @@ $$x_3=0,\,x_2=1\,and\,x_1=2/3$$
 $$x_{\lambda=4}\,=\begin{bmatrix}2/3\\1 \\0\end{bmatrix}$$
    
 $$\lambda=6$$
-$$ \begin{bmatrix}-5 & 2 & 3\\0 & -2 & 5\\0 & 0 & 0\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0$$ 
+$$ \begin{bmatrix}-5 & 2 & 3\\0 & -2 & 5\\0 & 0 & 0\end{bmatrix}\,\begin{bmatrix}v_1 \\v_2 \\v_3\end{bmatrix}=0$$
+
 $$Third\,pivot\,is\, 0.\,x_3=free.\,Let\,the\,value=1.$$
-$$-5x_1 +2x_2 +3x_3 = 0 and, -2x_1+5x_3 = 0$$
+$$-5x_1 +2x_2 +3x_3 = 0 and, -2x_2+5x_3 = 0$$
 $$x_3 = 1,\,x_2 = 5/2,\,and\,x_1=8/5$$
 
 $$x_{\lambda=6}\,=\begin{bmatrix}8/5 \\5/2 \\1\end{bmatrix}$$
 
 Confirm with buit-in function in r
+
 ```{r}
 
 A <- matrix(data = c(1,0,0,
                      2,4,0,
                      3,5,6), nrow = 3, ncol = 3, byrow = FALSE)
 A
-eign_A <- (eigen(A))$values
-eign_A
+eign_value <- (eigen(A))
+eign_value
+# eign_vectors <- (eigen(A))$vectors
+# eign_vectors
 ```
-
 
