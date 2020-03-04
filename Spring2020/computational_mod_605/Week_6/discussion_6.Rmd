@@ -1,0 +1,26 @@
+---
+title: "Untitled"
+author: "Salma Elshahawy"
+date: "3/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+draw_pascal <- function(n) {
+  for(i in 0:(n-1)) {
+      s = ''
+    for(k in 0:(n-i)) 
+      s <- paste(s)
+    for(j in 0:i) {
+      s <- paste(s, choose(i, j))
+    }
+    print(s)
+  }
+}
+
+pp = draw_pascal(10)
+```
