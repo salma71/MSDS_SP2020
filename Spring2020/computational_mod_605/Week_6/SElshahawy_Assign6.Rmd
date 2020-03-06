@@ -1,0 +1,139 @@
+---
+title: "SElshahawy_Assign5"
+author: "Salma Elshahawy"
+date: "2/24/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+## Question_1
+
+A box contains 54 red marbles, 9 white marbles, and 75 blue marbles. If a marble is randomly selected from the box, what is the probability that it is red or blue? Express your answer as a fraction or a decimal number rounded to four decimal places.
+
+```{r}
+p_redor_blu = round((54 + 75)/(54 + 9 + 75), 4)
+p_redor_blu
+```
+
+
+## Question_2
+
+You are going to play mini golf. A ball machine that contains 19 green golf balls, 20 red golf balls, 24 blue golf balls, and 17 yellow golf balls, randomly gives you your ball. What is the probability that you end up with a red golf ball? Express your answer as a simplified fraction or a decimal rounded to four decimal places.
+
+```{r}
+p_red_ball = (20) / (19 + 20 + 24 + 17)
+p_red_ball
+```
+
+
+## Question_3
+
+A pizza delivery company classifies its customers by gender and location of residence. The research department has gathered data from a random sample of 1399 customers. The data is summarized in the table below.
+
+What is the probability that a customer is not male or does not live with parents? Write your answer as a fraction or a decimal number rounded to four decimal places.
+
+**Answer:**
+
+Total: 1399
+Females: 228 + 79 + 252 + 97 + 72 = 728
+Not living with parents: 1399 - (215 + 252) = 932
+Females not living with parents: 728 - 252 = 476
+
+Females + Not living with parents - (Females not living with parents):
+
+```{r}
+round((728 + 932 - 476)/ 1399, 4)
+```
+
+
+## Question_4
+
+Determine if the following events are independent. 
+
+Going to the gym. **Dependent**
+
+Losing weight. **Dependent**
+
+## Question_5
+
+A veggie wrap at City Subs is composed of 3 different vegetables and 3 different condiments wrapped up in a tortilla. If there are **8 vegetables**, **7 condiments**, and **3 types of tortilla** available, how many different veggie wraps can be made?
+
+```{r}
+choose(8,3) * choose(7,3) * choose(3,1)
+```
+
+## Question_6
+
+Determine if the following events are independent.
+
+Jeff runs out of gas on the way to work. **Independent**
+
+Liz watches the evening news.**Independent**
+
+
+## Question_7
+
+The newly elected president needs to decide the remaining 8 spots available in the cabinet he/she is appointing. If there are 14 eligible candidates for these positions (where rank matters), how many different ways can the members of the cabinet be appointed?
+
+```{r}
+14 * 13 * 12 * 11 * 10 * 9 * 8 * 7
+```
+
+
+## Question_8 
+
+A bag contains 9 red, 4 orange, and 9 green jellybeans. What is the probability of reaching into the bag and randomly withdrawing 4 jellybeans such that the number of red ones is 0, the number of orange ones is 1, and the number of green ones is 3? Write your answer as a fraction or a decimal number rounded to four decimal places.
+
+## Question_9
+
+Evaluate the following expression.11!/7!
+
+```{r}
+ans = factorial(11) / factorial(7)
+ans
+```
+
+## Question_10
+Describe the complement of the given event.
+67% of subscribers to a fitness magazine are over the age of 34.
+
+## Question_11
+
+If you throw exactly three heads in four tosses of a coin you win $97. 
+If not, you pay me $30. Step 1. Find the expected value of the proposition. Round your answer to two decimal places.
+
+Step 2. If you played this game 559 times how much would you expect to win or lose? (Losses must be entered as negative.)
+
+## Question_12
+
+Flip a coin 9 times. If you get 4 tails or less, I will pay you $23. 
+Otherwise you pay me $26. Step 1. Find the expected value of the proposition. Round your answer to two decimal places.
+Step 2. If you played this game 994 times how much would you expect to win or lose? (Losses must be entered as negative.)
+
+## Question_13
+
+The sensitivity and specificity of the polygraph has been a subject of study and debate for years. A 2001 study of the use of polygraph for screening purposes suggested that the probability of detecting a liar was .59 (sensitivity) and that the probability of detecting a "truth teller" was .90 (specificity). We estimate that about 20% of individuals selected for the screening polygraph will lie.
+a. What is the probability that an individual is actually a liar given that the polygraph detected him/her as such? (Show me the table or the formulaic solution or both.)
+
+### b. 
+
+What is the probability that an individual is actually a truth-teller given that the polygraph detected him/her as such? (Show me the table or the formulaic solution or both.)
+
+### c. 
+
+What is the probability that a randomly selected individual is either a liar or was identified as a liar by the polygraph? Be sure to write the probability statement.
+
+
+
+
+
+
