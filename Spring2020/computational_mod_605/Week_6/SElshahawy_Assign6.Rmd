@@ -91,7 +91,17 @@ The newly elected president needs to decide the remaining 8 spots available in t
 
 ## Question_8 
 
-A bag contains 9 red, 4 orange, and 9 green jellybeans. What is the probability of reaching into the bag and randomly withdrawing 4 jellybeans such that the number of red ones is 0, the number of orange ones is 1, and the number of green ones is 3? Write your answer as a fraction or a decimal number rounded to four decimal places.
+A bag contains **9 red**, **4 orange**, and **9 green jellybeans**. What is the probability of reaching into the bag and randomly withdrawing _4 jellybeans_ such that the number of _red ones is 0_, the number of _orange ones is 1_, and the number of _green ones is 3_? Write your answer as a fraction or a decimal number rounded to four decimal places.
+
+```{r}
+p_gggo <- (9/22) * (8/21) * (7/20) * (4/19)
+p_ggog <- (9/22) * (8/21) * (4/20) * (7/19)
+p_gogg <- (9/22) * (4/21) * (8/20) * (7/19)
+p_oggg <- (4/22) * (9/21) * (8/20) * (7/19)
+p <- round(p_gggo + p_ggog + p_gogg + p_oggg, 4)
+p
+```
+
 
 ## Question_9
 
@@ -105,6 +115,7 @@ ans
 ## Question_10
 Describe the complement of the given event.
 67% of subscribers to a fitness magazine are over the age of 34.
+
 
 ## Question_11
 
