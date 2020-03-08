@@ -113,16 +113,31 @@ ans
 ```
 
 ## Question_10
-Describe the complement of the given event.
-67% of subscribers to a fitness magazine are over the age of 34.
+Describe the complement of the given event. 67% of subscribers to a fitness magazine are over the age of 34.
+
+**This means that (1 - 0.67 = 0.33) 33% of the subscribers of the fitness magazine are over the age of 34.**
 
 
 ## Question_11
 
 If you throw exactly three heads in four tosses of a coin you win $97. 
-If not, you pay me $30. Step 1. Find the expected value of the proposition. Round your answer to two decimal places.
+If not, you pay me $30. 
+
+Step 1. Find the expected value of the proposition. Round your answer to two decimal places.
 
 Step 2. If you played this game 559 times how much would you expect to win or lose? (Losses must be entered as negative.)
+
+```{r}
+total_space <- 2**4
+hhh_3 <- choose(4,3)
+p_hhh <- hhh_3 / total_space
+exp_val <- 97 * p_hhh + (-30) * (1 - p_hhh)
+exp_val
+total_games <- 559
+exp_total_games <- total_games * exp_val
+exp_total_games
+```
+
 
 ## Question_12
 
@@ -130,21 +145,87 @@ Flip a coin 9 times. If you get 4 tails or less, I will pay you $23.
 Otherwise you pay me $26. Step 1. Find the expected value of the proposition. Round your answer to two decimal places.
 Step 2. If you played this game 994 times how much would you expect to win or lose? (Losses must be entered as negative.)
 
+```{r}
+total_space <- 2**9
+total_space
+
+num_tails_4_or_less <- choose(9,1) + choose(9,2) + choose(9,3) + choose(9,4) + 1
+num_tails_4_or_less
+
+prob_tails_4_or_less <- num_tails_4_or_less / total_space
+prob_tails_4_or_less
+
+expected_value <- 23 * prob_tails_4_or_less + (-26) * (1 - prob_tails_4_or_less)
+expected_value
+
+total_games <- 994
+expected_amount_in_total_games <- total_games * expected_value
+expected_amount_in_total_games
+```
+
+
 ## Question_13
 
 The sensitivity and specificity of the polygraph has been a subject of study and debate for years. A 2001 study of the use of polygraph for screening purposes suggested that the probability of detecting a liar was .59 (sensitivity) and that the probability of detecting a "truth teller" was .90 (specificity). We estimate that about 20% of individuals selected for the screening polygraph will lie.
+
+```{r}
+prob_Liar <- 0.2
+prob_Truth <- 0.8
+senstivity <- 0.59
+specificity <- 0.90
+prob_detect_liar <- 0.59 * prob_Liar
+prob_detect_truth <- 0.90 * prob_Truth
+prob_false_detect_liar <- (1-0.59)*prob_Liar
+prob_false_detect_truth <- (1-0.9)*prob_Truth
+```
+
 a. What is the probability that an individual is actually a liar given that the polygraph detected him/her as such? (Show me the table or the formulaic solution or both.)
+
+```{r}
+prob_detect_liar /(prob_detect_liar + prob_false_detect_truth)
+```
 
 ### b. 
 
 What is the probability that an individual is actually a truth-teller given that the polygraph detected him/her as such? (Show me the table or the formulaic solution or both.)
 
+```{r}
+prob_detect_truth / (prob_detect_truth + prob_false_detect_liar)
+```
+
 ### c. 
 
 What is the probability that a randomly selected individual is either a liar or was identified as a liar by the polygraph? Be sure to write the probability statement.
 
+```{r}
+# Assuming 10000 different testers were involved
+rep_num <- 10000
 
+# if 20% of the testers are believed to lie, then
+p_lies <- rep_num * 0.20
+p_truth <- rep_num * 0.80
 
+aff_liers <- 0.59 * p_lies
+(lies_tested_as_truths <- p_lies - aff_liers)
+
+truths_tested_as_lies <- 0.90 * p_truth
+(aff_liers <- p_truth - truths_tested_as_lies)
+```
+
+```{r}
+p <- aff_liers / (aff_liers + truths_tested_as_lies)
+print(paste0("The probability is: ", round(p, 4) * 100, "%"))
+```
+
+```{r}
+p2 <- truths_tested_as_lies / (truths_tested_as_lies + lies_tested_as_truths)
+print(paste0("The probabi;lity is: ", round(p2, 4) * 100, "%"))
+```
+
+```{r}
+p3 <- p_lies/rep_num + (aff_liers + correctlyTested_truths)/num_testers - (aff_liers) / num_testers
+print(paste0("The probability is: ", round(p3, 4) * 100, "%"))
+```
 
 
 
