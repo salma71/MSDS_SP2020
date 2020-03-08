@@ -169,35 +169,6 @@ expected_amount_in_total_games
 The sensitivity and specificity of the polygraph has been a subject of study and debate for years. A 2001 study of the use of polygraph for screening purposes suggested that the probability of detecting a liar was .59 (sensitivity) and that the probability of detecting a "truth teller" was .90 (specificity). We estimate that about 20% of individuals selected for the screening polygraph will lie.
 
 ```{r}
-prob_Liar <- 0.2
-prob_Truth <- 0.8
-senstivity <- 0.59
-specificity <- 0.90
-prob_detect_liar <- 0.59 * prob_Liar
-prob_detect_truth <- 0.90 * prob_Truth
-prob_false_detect_liar <- (1-0.59)*prob_Liar
-prob_false_detect_truth <- (1-0.9)*prob_Truth
-```
-
-a. What is the probability that an individual is actually a liar given that the polygraph detected him/her as such? (Show me the table or the formulaic solution or both.)
-
-```{r}
-prob_detect_liar /(prob_detect_liar + prob_false_detect_truth)
-```
-
-### b. 
-
-What is the probability that an individual is actually a truth-teller given that the polygraph detected him/her as such? (Show me the table or the formulaic solution or both.)
-
-```{r}
-prob_detect_truth / (prob_detect_truth + prob_false_detect_liar)
-```
-
-### c. 
-
-What is the probability that a randomly selected individual is either a liar or was identified as a liar by the polygraph? Be sure to write the probability statement.
-
-```{r}
 # Assuming 10000 different testers were involved
 rep_num <- 10000
 
@@ -209,23 +180,41 @@ aff_liers <- 0.59 * p_lies
 (lies_tested_as_truths <- p_lies - aff_liers)
 
 truths_tested_as_lies <- 0.90 * p_truth
-(aff_liers <- p_truth - truths_tested_as_lies)
+(aff_true <- p_truth - truths_tested_as_lies)
 ```
+
+### a. 
+
+What is the probability that an individual is actually a liar given that the polygraph detected him/her as such? (Show me the table or the formulaic solution or both.)
 
 ```{r}
 p <- aff_liers / (aff_liers + truths_tested_as_lies)
-print(paste0("The probability is: ", round(p, 4) * 100, "%"))
+print(round(p, 4) * 100)
 ```
+
+### b. 
+
+What is the probability that an individual is actually a truth-teller given that the polygraph detected him/her as such? (Show me the table or the formulaic solution or both.)
 
 ```{r}
 p2 <- truths_tested_as_lies / (truths_tested_as_lies + lies_tested_as_truths)
-print(paste0("The probabi;lity is: ", round(p2, 4) * 100, "%"))
+print(round(p2, 4) * 100)
 ```
 
+### c. 
+
+What is the probability that a randomly selected individual is either a liar or was identified as a liar by the polygraph? Be sure to write the probability statement.
+
 ```{r}
-p3 <- p_lies/rep_num + (aff_liers + correctlyTested_truths)/num_testers - (aff_liers) / num_testers
-print(paste0("The probability is: ", round(p3, 4) * 100, "%"))
+p3 <- p_lies/rep_num + (aff_liers + aff_true)/rep_num - (aff_liers) / rep_num
+print(round(p3, 4) * 100)
 ```
+
+
+
+
+
+
 
 
 
