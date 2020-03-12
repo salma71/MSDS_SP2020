@@ -37,12 +37,63 @@ Your organization owns a copier (future lawyers, etc.) or MRI (future doctors). 
 ### a. 
 What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a geometric. (Hint: the probability is equivalent to not failing during the first 8 years..)
 
+$$\mu \quad =\quad \frac { 1-p }{ p } $$
+
+```{r}
+p_success = 1/11
+Exp_value = 1/p_success
+Exp_value
+Sd = Exp_value
+Sd
+
+pgeom(8,1/11)
+```
+
+
 ### b.
 What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as an exponential.
+
+$$E(x)=\frac { 1 }{ \lambda  } $$
+$$\lambda \quad =\quad \frac { 1 }{ 10 } $$
+
+$$ var(x)\quad =\quad \frac { 1 }{ { \lambda  }^{ 2 } } $$
+$$ SD(x)\quad =\quad \frac { 1 }{ { \lambda  } } $$
+$$ SD(x)\quad =\quad 10$$
+
+```{r}
+pexp(8,1/10)
+```
 
 ### c. 
 What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a binomial. (Hint: 0 success in 8 years)
 
+$$E(x)=\frac { 1 }{ \lambda  } $$
+
+$$E(x)=10 $$
+
+$$np=10 $$
+$$q=(1 - p) = 0.5 $$
+
+$$n=\frac { 10 }{ 0.5  }  = 20$$
+
+$$ SD(x)\quad =\quad \sqrt { np(1-p) }  =  \sqrt { 5}$$
+
+```{r}
+pbinom(8, size=20, prob=0.5) 
+```
+
 ### d. 
 What is the probability that the machine will fail after 8 years?. Provide also the expected value and standard deviation. Model as a Poisson.
+
+$$E(x)=10 $$
+
+$$\lambda =10 $$
+$$ var(x)\quad =10 $$
+$$ SD(x)\quad =  \sqrt { 10}$$
+
+```{r}
+ppois(8, lambda=10, lower=TRUE) # lower tail
+```
+
+
 
