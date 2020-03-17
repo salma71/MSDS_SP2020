@@ -1,0 +1,93 @@
+---
+title: "SElshahawy_Assign8"
+author: "Salma Elshahawy"
+date: "3/17/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question_11, page 303, Introduction to probability
+
+A company buys 100 lightbulbs, each of which has an **exponential lifetime of 1000 hours**. What is the expected time for the first of these bulbs to burn out?
+
+
+```{r}
+n <- 100
+meu <- 1000
+E_m <- meu/n # from excersie 10
+E_m
+```
+
+## Question_14, page 303, intruduction to probability
+
+Assume that $X_1$ and $X_2$ are independent random variables, each having an
+exponential density with parameter $\lambda$. Show that $Z = X_1-X_2$ has density
+$f_Z(z) = (1/2)e^{-\lambda|z|}$.
+
+
+$f_Z(z) = (1/2)e^{-\lambda|z|}$ can be re-written as $f_Z(z) = \begin{cases} (1/2)e^{-\lambda z}, & \mbox{if } z \ge 0, \\ (1/2)e^{\lambda z}, & \mbox{if }z <0. \end{cases}$
+
+Since $X_1$ and $X_2$ have exponential density, their PDF is
+
+<CENTER>
+$f_{X_1}(x)=f_{X_2}(x)=\begin{cases} \lambda e^{-\lambda x}, & \mbox{if } x\ge 0, \\ 0, & \mbox{otherwise. }\end{cases}$
+</CENTER>
+
+$$
+\begin{split}
+  f_Z(z) &= f_{X_1+(-X_2)}(z) \\
+    &= \int_{-\infty}^{\infty} f_{-X_2}(z-x_1) f_{X_1}(x_1) dx_1 \\
+    &= \int_{-\infty}^{\infty} f_{X_2}(x_1-z) f_{X_1}(x_1) dx_1 \\
+    &= \int_{-\infty}^{\infty} \lambda e^{-\lambda(x_1-z)} \lambda e^{-\lambda x_1} dx_1 \\
+    &= \int_{-\infty}^{\infty} \lambda^2 e^{-\lambda x_1 + \lambda z} e^{-\lambda x_1} dx_1 \\
+    &= \int_{-\infty}^{\infty} \lambda^2 e^{\lambda z - \lambda x_1 - \lambda x_1} dx_1 \\
+    &= \int_{-\infty}^{\infty} \lambda^2 e^{\lambda(z-2x_1)} dx_1
+\end{split}
+$$
+
+Consider $z=x_1-x_2$, then $x_2=x_1-z$.
+
+If $z \ge 0$, then $x_2=(x_1-z) \ge 0$, and $x_1 \ge z$, and, using WolframAlpha, $f_Z(z) = \int_{z}^{\infty} \lambda^2 e^{\lambda(z-2x_1)} dx_1 = \frac{1}{2} \lambda e^{-\lambda z}$. 
+
+If $z < 0$, then $x_2=(x_1-z) \ge 0$, and $x_1 \ge 0$, and $f_Z(z) = \int_{0}^{\infty} \lambda^2 e^{\lambda(z-2x_1)} dx_1 =\frac{1}{2} \lambda e^{\lambda z}$.
+
+Combining two sides we get $f_Z(z) = \begin{cases} (1/2)e^{-\lambda z}, & \mbox{if } z \ge 0, \\ (1/2)e^{\lambda z}, & \mbox{if }z <0. \end{cases}$
+
+## Question_1, page 320,321
+
+Let $X$ be a continuous random variable with mean $\mu = 10$ and variance
+$\sigma^2 = 100/3$. Using Chebyshev's Inequality, find an upper bound for the
+following probabilities.
+
+a. $P(|X - 10| \ge 2)$
+b. $P(|X - 10| \ge 5)$
+c. $P(|X - 10| \ge 9)$
+d. $P(|X - 10| \ge 20)$
+
+Chebyshev Inequality: $P(|X-\mu|\ge\epsilon) \le \frac{\sigma^2}{\epsilon^2}$ or, per example 8.4, $P(|X-\mu|\ge k\sigma) \le \frac{1}{k^2}$.
+
+Per problem, $\mu=10$ and $\sigma = \sqrt{\frac{100}{3}} = \frac{10}{\sqrt{3}}$.
+
+If $\epsilon = k\sigma$, then $k=\frac{\epsilon}{\sigma} = \frac{\epsilon\sqrt{3}}{10}$.
+
+Let $u$ be upper bound in Chebyshev's Inequality, then $u = \frac{1}{k^2} = \frac{1}{(\epsilon\sqrt{3}/10)^2} = \frac{100}{3\epsilon^2}$.
+
+a. $\epsilon=2$, the upper bound is $u= \frac{100}{3\times 2^2} = \frac{25}{3} \approx 8.3333$. Since probability cannot be greater than $1$, the upper bound is $1$.
+b. $\epsilon=5$, the upper bound is $u= \frac{100}{3\times 5^2} = \frac{4}{3} \approx 1.3333$. Since probability cannot be greater than $1$, the upper bound is $1$.
+c. $\epsilon=9$, the upper bound is $u= \frac{100}{3\times 9^2} = \frac{100}{243} \approx 0.4115$.
+d. $\epsilon=20$, the upper bound is $u= \frac{100}{3\times 20^2} = \frac{1}{12} \approx 0.0833$.
+
+
