@@ -85,9 +85,9 @@ If $\epsilon = k\sigma$, then $k=\frac{\epsilon}{\sigma} = \frac{\epsilon\sqrt{3
 
 Let $u$ be upper bound in Chebyshev's Inequality, then $u = \frac{1}{k^2} = \frac{1}{(\epsilon\sqrt{3}/10)^2} = \frac{100}{3\epsilon^2}$.
 
-a. $\epsilon=2$, the upper bound is $u= \frac{100}{3\times 2^2} = \frac{25}{3} \approx 8.3333$. Since probability cannot be greater than $1$, the upper bound is $1$.
-b. $\epsilon=5$, the upper bound is $u= \frac{100}{3\times 5^2} = \frac{4}{3} \approx 1.3333$. Since probability cannot be greater than $1$, the upper bound is $1$.
-c. $\epsilon=9$, the upper bound is $u= \frac{100}{3\times 9^2} = \frac{100}{243} \approx 0.4115$.
-d. $\epsilon=20$, the upper bound is $u= \frac{100}{3\times 20^2} = \frac{1}{12} \approx 0.0833$.
+a. $\epsilon=2$, the upper bound is $u= \frac{100}{3\times 2^2} = 8.3333$. Since probability cannot be greater than $1$, the upper bound is $1$.
+b. $\epsilon=5$, the upper bound is $u= \frac{100}{3\times 5^2} = 1.3333$. Since probability cannot be greater than $1$, the upper bound is $1$.
+c. $\epsilon=9$, the upper bound is $u= \frac{100}{3\times 9^2} = 0.4115$.
+d. $\epsilon=20$, the upper bound is $u= \frac{100}{3\times 20^2} = 0.0833$.
 
 

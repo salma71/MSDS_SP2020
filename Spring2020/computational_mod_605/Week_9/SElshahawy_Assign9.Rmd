@@ -1,0 +1,75 @@
+---
+title: "SElshahawy_Assig9"
+author: "Salma Elshahawy"
+date: "3/23/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question_11, page 363, Introduction to probability
+
+The price of one share of stock in the Pilsdorff Beer Company (see Exer- cise 8.2.12) is given by Yn on the nth day of the year. Finn observes that the differences Xn = Yn+1 − Yn appear to be independent random variables with a common distribution having mean μ = 0 and variance σ2 = 1/4. If Y1 = 100, estimate the probability that Y365 is
+
+The summation of random variables will be as the following:
+
+$${ S }_{ n }\quad =\quad \sum _{ x\quad =\quad 1 }^{ x\quad =\quad n }{ { X }_{ 1 } } +\quad { X }_{ 2 }\quad +\quad { X }_{ 3 }\quad +\quad ......\quad +\quad { X }_{ n }$$
+Now substitute X by ${ Y }_{ n+1 }\quad -\quad { Y }_{ n }$
+
+$${ S }_{ n }\quad =\quad \sum { \left( { Y }_{ 2 }\quad -\quad { Y }_{ 1 } \right)  } \quad +\quad \left( { Y }_{ 3 }\quad -\quad { Y }_{ 2 } \right) \quad +\quad ......\quad +\quad \left( { Y }_{ n+1 }\quad -\quad { Y }_{ n } \right) $$ 
+Then we end up with:
+
+$${ S }_{ n }\quad =\quad { Y }_{ n+1 }\quad -\quad { Y }_{ n }$$ 
+
+$${ S }_{ n }\quad =\quad { Y }_{ n+1 }\quad -\quad 100\quad (where\quad { Y }_{ n }\quad =\quad 100)$$
+Now we have to get the mean and standard deviation 
+$$var{ S }_{ n }\quad =\quad { \sigma  }^{ 2 }{ S }_{ n }\quad =\quad \frac { 1 }{ 4 } \times \quad \sum _{ X=0 }^{ n }{ { { \sigma  } }_{ X }^{ 2 } } \quad =\quad \frac { n }{ 4 }$$
+$$SD{ S }_{ n }\quad =\quad \sqrt { \frac { n }{ 4 }  } \quad =\quad \frac { \sqrt { n }  }{ 2 } $$
+
+Consider n = 364 where ${ n+1 } = 365$
+
+$${ S }_{ 364 }\quad =\quad { Y }_{ 365 }\quad -\quad 100\\ { Y }_{ 365 }\quad =\quad { S }_{ 364 }\quad +\quad 100$$
+calculate variance for n = 364
+
+```{r}
+n = 364
+var_s_364 = n/4
+var_s_364
+
+sd_s_364 = sqrt(n)/2
+sd_s_364
+```
+
+
+### (a) $\ge 100$
+
+```{r}
+z = (100-100) / sd_s_364
+pnorm(z, lower.tail = FALSE)
+```
+
+### (b) $\ge 110$
+```{r}
+z = (110-100) / sd_s_364
+pnorm(z, lower.tail = FALSE)
+```
+
+### (c) $\ge 120$
+
+```{r}
+z = (120-100) / sd_s_364
+pnorm(z, lower.tail = FALSE)
+```
+
