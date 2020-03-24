@@ -73,3 +73,58 @@ z = (120-100) / sd_s_364
 pnorm(z, lower.tail = FALSE)
 ```
 
+## Question_2
+
+Calculate the expected value and variance of the binomial distribution using the moment generating function.
+
+I will start with the definition of ${ M }_{ x }(t)\quad =\quad E({ e }^{ tx })$
+for a descrete variables:
+$${ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ { e }^{ tx } } \cdot \quad p(x)\quad \longrightarrow \quad 1$$
+from the binomial theory:
+$$p(x)\quad =\quad \begin{pmatrix} n \\ x \end{pmatrix}\cdot { \quad p }^{ x }\cdot \quad { (1-p) }^{ n-x }\quad \rightarrow \quad 2$$
+by substitute equation 2 into equation 1 we get: 
+$${ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ { e }^{ tx } } \cdot \quad \begin{pmatrix} n \\ x \end{pmatrix}\cdot { \quad p }^{ x }\cdot \quad { (1-p) }^{ n-x }$$
+take e and p the same brackets to the power of x we get:
+$${ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ \begin{pmatrix} n \\ x \end{pmatrix} } \cdot \quad ({ e }^{ t }{ \quad p) }^{ x }\cdot \quad { (1-p) }^{ n-x }\quad \rightarrow \quad 3$$
+and we know from the Binomial theorm that
+$$\sum _{ x=0 }^{ n }{ \begin{pmatrix} n \\ x \end{pmatrix} } { \quad y }^{ x }\quad { \quad z }^{ n-x }\quad =\quad { (y\quad +\quad z) }^{ n }\quad for\quad any\quad x,y,z\quad \epsilon \quad R\quad \quad \rightarrow \quad 4$$
+
+
+Then we can use the Binomial theorm to get the MGF from equation 3 then we get:
+
+$$ { M }_{ x }(t)\quad =\quad { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n }\quad for\quad t\quad \epsilon \quad R\quad \quad \rightarrow \quad done(the\quad expected\quad value)$$
+
+$$var(x) = second moment - { first\quad moment }^{ 2 }\quad at\quad t\quad =\quad 0$$
+$${ M }_{ x }^{ ' }(t)\quad =\quad n{ (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-1 }\cdot \quad { e }^{ t }{ \quad p }\quad \rightarrow \quad 1st\quad moment$$
+$${ M }_{ x }^{ ' }(0)\quad =\quad np\quad \rightarrow \quad { { M }_{ x }^{ ' }(0) }^{ 2 }\quad =\quad { n }^{ 2 }{ p }^{ 2 }\quad \rightarrow \quad 5$$
+$${ M }_{ x }^{ '' }(t)\quad =\quad n\cdot (n-1)\cdot { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-2 }\cdot \quad { e }^{ 2t }{ \quad p }^{ 2 }\quad +\quad { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-1 }\quad \cdot \quad n\quad \cdot \quad { e }^{ t }{ \quad p }\quad \rightarrow \quad 2nd\quad moment$$
+$${ M }_{ x }^{ '' }(0)\quad =\quad n\cdot (n-1){ \quad p }^{ 2 }\quad +\quad np\quad \rightarrow \quad 6$$
+
+by subtracting equation 5 from 6 we get variance
+
+$$var(x)\quad =\quad n\cdot (n-1){ \quad p }^{ 2 }\quad +\quad np\quad -\quad { n }^{ 2 }{ p }^{ 2 }$$
+$$var(x)\quad =\quad np(1-p)\quad \rightarrow \quad done\quad (the\quad variance)$$
+
+## Question_3
+
+Calculate the expected value and variance of the exponential distribution using the moment generating function.
+
+for the exponential distribution:
+$$f(x)=\lambda e^{-\lambda x}$$
+The MGF should be:
+$${ M }_{ x }(t)=\frac{\lambda}{\lambda-t} \quad where \quad t<\lambda$$
+
+Getting the first moment:
+$${ M }_{ x }^{ '' }(t) = \frac{\lambda}{(\lambda-t)^2}$$
+The second moment:
+$${ M }_{ x }^{ '' }(t) = \frac{2\lambda}{(\lambda-t)^3}$$
+$${ E }(x) = { M }_{ x }(t) \quad at \quad t = 0$$
+$${ E }(x) = \frac{1}{\lambda}$$
+
+$${ var }(x) = { M }_{ x }^{ '' }(t)-{ M }_{ x }^{ ' }(t)^2 \quad at \quad t = 0$$
+
+$${ var }(x) = \frac{1}{\lambda^2}$$
+
+
+
+

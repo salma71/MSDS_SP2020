@@ -2790,9 +2790,56 @@ div.tocify {
 <div id="question_11-page-363-introduction-to-probability" class="section level2">
 <h2>Question_11, page 363, Introduction to probability</h2>
 <p>The price of one share of stock in the Pilsdorff Beer Company (see Exer- cise 8.2.12) is given by Yn on the nth day of the year. Finn observes that the differences Xn = Yn+1 − Yn appear to be independent random variables with a common distribution having mean μ = 0 and variance σ2 = 1/4. If Y1 = 100, estimate the probability that Y365 is</p>
-<div id="age-100" class="section level3">
-<h3>(a)<span class="math inline">\(\ge 100\)</span></h3>
+<p>The summation of random variables will be as the following:</p>
+<p><span class="math display">\[{ S }_{ n }\quad =\quad \sum _{ x\quad =\quad 1 }^{ x\quad =\quad n }{ { X }_{ 1 } } +\quad { X }_{ 2 }\quad +\quad { X }_{ 3 }\quad +\quad ......\quad +\quad { X }_{ n }\]</span> Now substitute X by <span class="math inline">\({ Y }_{ n+1 }\quad -\quad { Y }_{ n }\)</span></p>
+<p><span class="math display">\[{ S }_{ n }\quad =\quad \sum { \left( { Y }_{ 2 }\quad -\quad { Y }_{ 1 } \right)  } \quad +\quad \left( { Y }_{ 3 }\quad -\quad { Y }_{ 2 } \right) \quad +\quad ......\quad +\quad \left( { Y }_{ n+1 }\quad -\quad { Y }_{ n } \right) \]</span> Then we end up with:</p>
+<p><span class="math display">\[{ S }_{ n }\quad =\quad { Y }_{ n+1 }\quad -\quad { Y }_{ n }\]</span></p>
+<p><span class="math display">\[{ S }_{ n }\quad =\quad { Y }_{ n+1 }\quad -\quad 100\quad (where\quad { Y }_{ n }\quad =\quad 100)\]</span> Now we have to get the mean and standard deviation <span class="math display">\[var{ S }_{ n }\quad =\quad { \sigma  }^{ 2 }{ S }_{ n }\quad =\quad \frac { 1 }{ 4 } \times \quad \sum _{ X=0 }^{ n }{ { { \sigma  } }_{ X }^{ 2 } } \quad =\quad \frac { n }{ 4 }\]</span> <span class="math display">\[SD{ S }_{ n }\quad =\quad \sqrt { \frac { n }{ 4 }  } \quad =\quad \frac { \sqrt { n }  }{ 2 } \]</span></p>
+<p>Consider n = 364 where <span class="math inline">\({ n+1 } = 365\)</span></p>
+<p><span class="math display">\[{ S }_{ 364 }\quad =\quad { Y }_{ 365 }\quad -\quad 100\\ { Y }_{ 365 }\quad =\quad { S }_{ 364 }\quad +\quad 100\]</span> calculate variance for n = 364</p>
+<pre class="r"><code>n = 364
+var_s_364 = n/4
+var_s_364</code></pre>
+<pre><code>## [1] 91</code></pre>
+<pre class="r"><code>sd_s_364 = sqrt(n)/2
+sd_s_364</code></pre>
+<pre><code>## [1] 9.539392</code></pre>
+<div id="a-ge-100" class="section level3">
+<h3>(a) <span class="math inline">\(\ge 100\)</span></h3>
+<pre class="r"><code>z = (100-100) / sd_s_364
+pnorm(z, lower.tail = FALSE)</code></pre>
+<pre><code>## [1] 0.5</code></pre>
 </div>
+<div id="b-ge-110" class="section level3">
+<h3>(b) <span class="math inline">\(\ge 110\)</span></h3>
+<pre class="r"><code>z = (110-100) / sd_s_364
+pnorm(z, lower.tail = FALSE)</code></pre>
+<pre><code>## [1] 0.1472537</code></pre>
+</div>
+<div id="c-ge-120" class="section level3">
+<h3>(c) <span class="math inline">\(\ge 120\)</span></h3>
+<pre class="r"><code>z = (120-100) / sd_s_364
+pnorm(z, lower.tail = FALSE)</code></pre>
+<pre><code>## [1] 0.01801584</code></pre>
+</div>
+</div>
+<div id="question_2" class="section level2">
+<h2>Question_2</h2>
+<p>Calculate the expected value and variance of the binomial distribution using the moment generating function.</p>
+<p>I will start with the definition of <span class="math inline">\({ M }_{ x }(t)\quad =\quad E({ e }^{ tx })\)</span> for a descrete variables: <span class="math display">\[{ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ { e }^{ tx } } \cdot \quad p(x)\quad \longrightarrow \quad 1\]</span> from the binomial theory: <span class="math display">\[p(x)\quad =\quad \begin{pmatrix} n \\ x \end{pmatrix}\cdot { \quad p }^{ x }\cdot \quad { (1-p) }^{ n-x }\quad \rightarrow \quad 2\]</span> by substitute equation 2 into equation 1 we get: <span class="math display">\[{ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ { e }^{ tx } } \cdot \quad \begin{pmatrix} n \\ x \end{pmatrix}\cdot { \quad p }^{ x }\cdot \quad { (1-p) }^{ n-x }\]</span> take e and p the same brackets to the power of x we get: <span class="math display">\[{ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ \begin{pmatrix} n \\ x \end{pmatrix} } \cdot \quad ({ e }^{ t }{ \quad p) }^{ x }\cdot \quad { (1-p) }^{ n-x }\quad \rightarrow \quad 3\]</span> and we know from the Binomial theorm that <span class="math display">\[\sum _{ x=0 }^{ n }{ \begin{pmatrix} n \\ x \end{pmatrix} } { \quad y }^{ x }\quad { \quad z }^{ n-x }\quad =\quad { (y\quad +\quad z) }^{ n }\quad for\quad any\quad x,y,z\quad \epsilon \quad R\quad \quad \rightarrow \quad 4\]</span></p>
+<p>Then we can use the Binomial theorm to get the MGF from equation 3 then we get:</p>
+<p><span class="math display">\[ { M }_{ x }(t)\quad =\quad { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n }\quad for\quad t\quad \epsilon \quad R\quad \quad \rightarrow \quad done(the\quad expected\quad value)\]</span></p>
+<p><span class="math display">\[var(x) = second moment - { first\quad moment }^{ 2 }\quad at\quad t\quad =\quad 0\]</span> <span class="math display">\[{ M }_{ x }^{ &#39; }(t)\quad =\quad n{ (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-1 }\cdot \quad { e }^{ t }{ \quad p }\quad \rightarrow \quad 1st\quad moment\]</span> <span class="math display">\[{ M }_{ x }^{ &#39; }(0)\quad =\quad np\quad \rightarrow \quad { { M }_{ x }^{ &#39; }(0) }^{ 2 }\quad =\quad { n }^{ 2 }{ p }^{ 2 }\quad \rightarrow \quad 5\]</span> <span class="math display">\[{ M }_{ x }^{ &#39;&#39; }(t)\quad =\quad n\cdot (n-1)\cdot { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-2 }\cdot \quad { e }^{ 2t }{ \quad p }^{ 2 }\quad +\quad { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-1 }\quad \cdot \quad n\quad \cdot \quad { e }^{ t }{ \quad p }\quad \rightarrow \quad 2nd\quad moment\]</span> <span class="math display">\[{ M }_{ x }^{ &#39;&#39; }(0)\quad =\quad n\cdot (n-1){ \quad p }^{ 2 }\quad +\quad np\quad \rightarrow \quad 6\]</span></p>
+<p>by subtracting equation 5 from 6 we get variance</p>
+<p><span class="math display">\[var(x)\quad =\quad n\cdot (n-1){ \quad p }^{ 2 }\quad +\quad np\quad -\quad { n }^{ 2 }{ p }^{ 2 }\]</span> <span class="math display">\[var(x)\quad =\quad np(1-p)\quad \rightarrow \quad done\quad (the\quad variance)\]</span></p>
+</div>
+<div id="question_3" class="section level2">
+<h2>Question_3</h2>
+<p>Calculate the expected value and variance of the exponential distribution using the moment generating function.</p>
+<p>for the exponential distribution: <span class="math display">\[f(x)=\lambda e^{-\lambda x}\]</span> The MGF should be: <span class="math display">\[{ M }_{ x }(t)=\frac{\lambda}{\lambda-t} \quad where \quad t&lt;\lambda\]</span></p>
+<p>Getting the first moment: <span class="math display">\[{ M }_{ x }^{ &#39;&#39; }(t) = \frac{\lambda}{(\lambda-t)^2}\]</span> The second moment: <span class="math display">\[{ M }_{ x }^{ &#39;&#39; }(t) = \frac{2\lambda}{(\lambda-t)^3}\]</span> <span class="math display">\[{ E }(x) = { M }_{ x }(t) \quad at \quad t = 0\]</span> <span class="math display">\[{ E }(x) = \frac{1}{\lambda}\]</span></p>
+<p><span class="math display">\[{ var }(x) = { M }_{ x }^{ &#39;&#39; }(t)-{ M }_{ x }^{ &#39; }(t)^2 \quad at \quad t = 0\]</span></p>
+<p><span class="math display">\[{ var }(x) = \frac{1}{\lambda^2}\]</span></p>
 </div>
 
 
