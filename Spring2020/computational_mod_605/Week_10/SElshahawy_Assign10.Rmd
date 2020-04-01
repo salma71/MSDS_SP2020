@@ -1,0 +1,43 @@
+---
+title: "SElshahawy_Assign10"
+author: "Salma Elshahawy"
+date: "3/31/2020"
+output: 
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Smith is in jail and has 1 dollar; he can get out on bail if he has 8 dollars.A guard agrees to make a series of bets with him. If Smith bets A dollars, he wins A dollars with probability .4 and loses A dollars with probability .6.
+
+Find the probability that he wins 8 dollars before losing all of his money if
+(a) he bets 1 dollar each time (timid strategy).
+
+$$ P = \frac{1-(\frac{q}{p})^s}{1-(\frac{q}{p})^M} \\$$
+
+```{r}
+p = 0.4 # winning probability
+q = 0.6 # losing probability
+s = 1 # how many dollars he started
+M = 8 # when he stops
+P = (1-(q/p)^s) / (1-(q/p)^M)  
+P # probability to win the bet
+```
+
+
+(b) he bets, each time, as much as possible but not more than necessary to bring his fortune up to 8 dollars (bold strategy).
+
+
+(c) Which strategy gives Smith the better chance of getting out of jail?
+

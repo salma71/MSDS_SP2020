@@ -1,0 +1,292 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={SElshahawy\_Assig9},
+            pdfauthor={Salma Elshahawy},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{SElshahawy\_Assig9}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Salma Elshahawy}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{3/23/2020}
+
+\usepackage{geometry}
+
+\begin{document}
+\maketitle
+
+\hypertarget{question_11-page-363-introduction-to-probability}{%
+\subsection{Question\_11, page 363, Introduction to
+probability}\label{question_11-page-363-introduction-to-probability}}
+
+The price of one share of stock in the Pilsdorff Beer Company (see Exer-
+cise 8.2.12) is given by Yn on the nth day of the year. Finn observes
+that the differences Xn = Yn+1 − Yn appear to be independent random
+variables with a common distribution having mean μ = 0 and variance σ2 =
+1/4. If Y1 = 100, estimate the probability that Y365 is (a) \(\ge 100\)
+(b) \(\ge 110\) (c) \(\ge 120\)
+
+\textbf{Answer:-}
+
+The summation of random variables will be as the following:
+
+\[{ S }_{ n }\quad =\quad \sum _{ x\quad =\quad 1 }^{ x\quad =\quad n }{ { X }_{ 1 } } +\quad { X }_{ 2 }\quad +\quad { X }_{ 3 }\quad +\quad ......\quad +\quad { X }_{ n }\]
+Now substitute X by \({ Y }_{ n+1 }\quad -\quad { Y }_{ n }\)
+
+\[{ S }_{ n }\quad =\quad \sum { \left( { Y }_{ 2 }\quad -\quad { Y }_{ 1 } \right)  } \quad +\quad \left( { Y }_{ 3 }\quad -\quad { Y }_{ 2 } \right) \quad +\quad ......\quad +\quad \left( { Y }_{ n+1 }\quad -\quad { Y }_{ n } \right) \]
+Then we end up with:
+
+\[{ S }_{ n }\quad =\quad { Y }_{ n+1 }\quad -\quad { Y }_{ n }\]
+
+\[{ S }_{ n }\quad =\quad { Y }_{ n+1 }\quad -\quad 100\quad (where\quad { Y }_{ n }\quad =\quad 100)\]
+Now we have to get the mean and standard deviation
+\[var{ S }_{ n }\quad =\quad { \sigma  }^{ 2 }{ S }_{ n }\quad =\quad \frac { 1 }{ 4 } \times \quad \sum _{ X=0 }^{ n }{ { { \sigma  } }_{ X }^{ 2 } } \quad =\quad \frac { n }{ 4 }\]
+\[SD{ S }_{ n }\quad =\quad \sqrt { \frac { n }{ 4 }  } \quad =\quad \frac { \sqrt { n }  }{ 2 } \]
+
+Consider n = 364 where \({ n+1 } = 365\)
+
+\[{ S }_{ 364 }\quad =\quad { Y }_{ 365 }\quad -\quad 100\\ { Y }_{ 365 }\quad =\quad { S }_{ 364 }\quad +\quad 100\]
+calculate variance for n = 364
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{n =}\StringTok{ }\DecValTok{364}
+\NormalTok{var_s_}\DecValTok{364}\NormalTok{ =}\StringTok{ }\NormalTok{n}\OperatorTok{/}\DecValTok{4}
+\NormalTok{var_s_}\DecValTok{364}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 91
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sd_s_}\DecValTok{364}\NormalTok{ =}\StringTok{ }\KeywordTok{sqrt}\NormalTok{(n)}\OperatorTok{/}\DecValTok{2}
+\NormalTok{sd_s_}\DecValTok{364}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 9.539392
+\end{verbatim}
+
+\hypertarget{a-ge-100}{%
+\subsubsection{\texorpdfstring{(a)
+\(\ge 100\)}{(a) \textbackslash ge 100}}\label{a-ge-100}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{z =}\StringTok{ }\NormalTok{(}\DecValTok{100-100}\NormalTok{) }\OperatorTok{/}\StringTok{ }\NormalTok{sd_s_}\DecValTok{364}
+\KeywordTok{pnorm}\NormalTok{(z, }\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.5
+\end{verbatim}
+
+\hypertarget{b-ge-110}{%
+\subsubsection{\texorpdfstring{(b)
+\(\ge 110\)}{(b) \textbackslash ge 110}}\label{b-ge-110}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{z =}\StringTok{ }\NormalTok{(}\DecValTok{110-100}\NormalTok{) }\OperatorTok{/}\StringTok{ }\NormalTok{sd_s_}\DecValTok{364}
+\KeywordTok{pnorm}\NormalTok{(z, }\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1472537
+\end{verbatim}
+
+\hypertarget{c-ge-120}{%
+\subsubsection{\texorpdfstring{(c)
+\(\ge 120\)}{(c) \textbackslash ge 120}}\label{c-ge-120}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{z =}\StringTok{ }\NormalTok{(}\DecValTok{120-100}\NormalTok{) }\OperatorTok{/}\StringTok{ }\NormalTok{sd_s_}\DecValTok{364}
+\KeywordTok{pnorm}\NormalTok{(z, }\DataTypeTok{lower.tail =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.01801584
+\end{verbatim}
+
+\hypertarget{question_2}{%
+\subsection{Question\_2}\label{question_2}}
+
+Calculate the expected value and variance of the binomial distribution
+using the moment generating function.
+
+\textbf{Answer:-}
+
+I will start with the definition of
+\({ M }_{ x }(t)\quad =\quad E({ e }^{ tx })\) for a descrete variables:
+\[{ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ { e }^{ tx } } \cdot \quad p(x)\quad \longrightarrow \quad 1\]
+from the binomial theory:
+\[p(x)\quad =\quad \begin{pmatrix} n \\ x \end{pmatrix}\cdot { \quad p }^{ x }\cdot \quad { (1-p) }^{ n-x }\quad \rightarrow \quad 2\]
+by substitute equation 2 into equation 1 we get:
+\[{ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ { e }^{ tx } } \cdot \quad \begin{pmatrix} n \\ x \end{pmatrix}\cdot { \quad p }^{ x }\cdot \quad { (1-p) }^{ n-x }\]
+take e and p the same brackets to the power of x we get:
+\[{ M }_{ x }(t)\quad =\quad \sum _{ x=0 }^{ n }{ \begin{pmatrix} n \\ x \end{pmatrix} } \cdot \quad ({ e }^{ t }{ \quad p) }^{ x }\cdot \quad { (1-p) }^{ n-x }\quad \rightarrow \quad 3\]
+and we know from the Binomial theorm that
+\[\sum _{ x=0 }^{ n }{ \begin{pmatrix} n \\ x \end{pmatrix} } { \quad y }^{ x }\quad { \quad z }^{ n-x }\quad =\quad { (y\quad +\quad z) }^{ n }\quad for\quad any\quad x,y,z\quad \epsilon \quad R\quad \quad \rightarrow \quad 4\]
+
+Then we can use the Binomial theorm to get the MGF from equation 3 then
+we get:
+
+\[ { M }_{ x }(t)\quad =\quad { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n }\quad for\quad t\quad \epsilon \quad R\quad \quad \rightarrow \quad done(the\quad expected\quad value)\]
+
+\[var(x) = second moment - { first\quad moment }^{ 2 }\quad at\quad t\quad =\quad 0\]
+\[{ M }_{ x }^{ ' }(t)\quad =\quad n{ (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-1 }\cdot \quad { e }^{ t }{ \quad p }\quad \rightarrow \quad 1st\quad moment\]
+\[{ M }_{ x }^{ ' }(0)\quad =\quad np\quad \rightarrow \quad { { M }_{ x }^{ ' }(0) }^{ 2 }\quad =\quad { n }^{ 2 }{ p }^{ 2 }\quad \rightarrow \quad 5\]
+\[{ M }_{ x }^{ '' }(t)\quad =\quad n\cdot (n-1)\cdot { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-2 }\cdot \quad { e }^{ 2t }{ \quad p }^{ 2 }\quad +\quad { (({ e }^{ t }{ \quad p) }\quad +\quad (1-p)) }^{ n-1 }\quad \cdot \quad n\quad \cdot \quad { e }^{ t }{ \quad p }\quad \rightarrow \quad 2nd\quad moment\]
+\[{ M }_{ x }^{ '' }(0)\quad =\quad n\cdot (n-1){ \quad p }^{ 2 }\quad +\quad np\quad \rightarrow \quad 6\]
+
+by subtracting equation 5 from 6 we get variance
+
+\[var(x)\quad =\quad n\cdot (n-1){ \quad p }^{ 2 }\quad +\quad np\quad -\quad { n }^{ 2 }{ p }^{ 2 }\]
+\[var(x)\quad =\quad np(1-p)\quad \rightarrow \quad done\quad (the\quad variance)\]
+
+\hypertarget{question_3}{%
+\subsection{Question\_3}\label{question_3}}
+
+Calculate the expected value and variance of the exponential
+distribution using the moment generating function.
+
+\textbf{Answer:-}
+
+for the exponential distribution: \[f(x)=\lambda e^{-\lambda x}\] The
+MGF should be:
+\[{ M }_{ x }(t)=\frac{\lambda}{\lambda-t} \quad where \quad t<\lambda\]
+
+Getting the first moment:
+\[{ M }_{ x }^{ '' }(t) = \frac{\lambda}{(\lambda-t)^2}\] The second
+moment: \[{ M }_{ x }^{ '' }(t) = \frac{2\lambda}{(\lambda-t)^3}\]
+\[{ E }(x) = { M }_{ x }(t) \quad at \quad t = 0\]
+\[{ E }(x) = \frac{1}{\lambda}\]
+
+\[{ var }(x) = { M }_{ x }^{ '' }(t)-{ M }_{ x }^{ ' }(t)^2 \quad at \quad t = 0\]
+
+\[{ var }(x) = \frac{1}{\lambda^2}\]
+
+
+\end{document}
