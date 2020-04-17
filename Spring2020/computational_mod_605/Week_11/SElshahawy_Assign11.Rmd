@@ -1,0 +1,127 @@
+---
+title: "SElshahawy_Assign11"
+author: "Salma Elshahawy"
+date: "4/17/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Read the dataset
+
+```{r}
+library(datasets)
+dataset = cars
+head(dataset)
+```
+## Visualize the data
+
+```{r}
+summary(dataset)
+```
+```{r}
+str(dataset)
+```
+```{r}
+library(ggplot2)
+ggplot(dataset, aes(x = speed, y = dist)) +
+  geom_point() + 
+  labs(title = "Stopping distance vs. speed")
+```
+
+There is a linear relationship between distance and speed, so we can perform simple linear regression
+
+```{r}
+library(caTools)
+set.seed(123)
+split = sample.split(dataset$dist, SplitRatio = 2/3)
+training_set = subset(dataset, split == TRUE)
+test_set = subset(dataset, split == FALSE)
+```
+
+## Fitting Simple Linear Regression to the Training set
+
+```{r}
+regressor = lm(formula = dist ~ speed,
+               data = training_set)
+summary(regressor)
+```
+
+The analysis shows that to increase the stopping distance by one unit, the  speed should be increased by 4.2 units. The Adjusted R-squred 0.636 means that the data can be  used  to  predict 63.6% of points correctly, which isnot bad. The  p-value is less than 0.05 significance level. 
+
+```{r}
+library(ggplot2)
+ggplot(dataset, aes(x = speed, y = dist)) +
+  geom_point() + 
+  geom_smooth(method = lm) +
+  labs(title = "Distance vs. speed")
+```
+
+The blue line represents the points that can be predicted from this variable. 
+
+## Residual dignosis
+
+```{r}
+par(mfrow=c(2,2)) # Split the plotting panel into a 2 x 2 grid
+plot(regressor) # Plot the model information
+```
+
+The first plot (residuals vs. fitted values) is a simple scatterplot between residuals and predicted values. The residuals are more condense below the the fitted line.
+
+The second plot (normal Q-Q) is a normal probability plot.  It gives so far a straight line which means that the errors are distributed normally. However, there are some errors that afftect the model 35 and 42
+
+The third plot (Scale-Location), like the the first, looks random.  No patterns.
+
+The last plot (Cook’s distance) tells us which points have the greatest influence on the regression (leverage points). We see that points 23, 49 and 39 have great influence on the model.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
