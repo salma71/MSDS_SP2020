@@ -1,0 +1,179 @@
+---
+title: "Discussion_12"
+author: "Salma Elshahawy"
+date: "4/23/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dataset importing
+
+```{r}
+library(RCurl)
+url = 'https://raw.githubusercontent.com/salma71/Machine-learning-tutorial/master/Part%202%20-%20Regression/Section%205%20-%20Multiple%20Linear%20Regression/50_Startups.csv'
+dataset = read.csv(url, header = TRUE)
+head(dataset)
+```
+
+## Exploring the dataset
+
+```{r}
+str(dataset)
+```
+The dataset has 50 instances (observations) with 5 attributes(variables). State attribute is dichotomous term with 3 levels "New York", "California", and "Florida". Here we want to know which attribute has the greatest impact on profit, is it R.D spend, or Marketing spend...etc. 
+
+## Data processing
+
+The first step I would make is to convert the categorical variable into dummy variable for easy interpretation. 
+
+```{r}
+# encode the categorical variables
+dataset$State = factor(dataset$State,
+                       levels = c('New York', 'California', 'Florida'), 
+                       labels = c(1, 2, 3))
+
+head(dataset)
+```
+
+## Getting Summary statistics
+
+```{r}
+summary(dataset)
+
+```
+
+## Visualizing
+It is a good approach to perform EDA before going into building a model. I would make a univariate for each variable. The best is the boxplot and histogram to investigate if the distribution is a Guassian distribution. It would help picking the right algorithm to build the model.
+
+```{r}
+library(ggplot2)
+ggplot(dataset, aes(x = State, y = Profit)) +
+        geom_boxplot(outlier.colour="red", outlier.shape=8,
+                outlier.size=4)
+```
+
+It seems that New York has some outlier points. 
+
+```{r}
+
+hist(dataset$R.D.Spend)
+hist(dataset$Administration)
+hist(dataset$Marketing.Spend)
+```
+
+Multivariate plot
+
+scatter plot is the best candidate for that purpose
+
+```{r message=FALSE, warning=FALSE}
+library(GGally)
+ggpairs(dataset)
+
+```
+
+Investigating the correlation between variables
+
+```{r}
+ggcorr(dataset)
+
+```
+It is obvious that both R.D Spend and Marketing Spend both have a great effect on the profit. 
+
+
+## Building model
+
+This dataset is an ideal candidate for polynomial linear regression.
+
+```{r}
+regressor = lm(formula = Profit ~., data = dataset)
+summary(regressor)
+```
+
+As we can see that R.D Spend has the greatest effect on the Profit. Eventhough Marketing spend shows a strong correlation to profit, it doesn't acctually affect the profit - P-value > 0.05 significance level, which confirms that correlation doesn't imply causation. 
+
+Intecepts interprets how the variables correlated to the dependnt variable "Profit". The positive sign means positive correlation and negative sign means negative correlation.
+
+The standard error is an estimate of the standard deviation of the coefficient, the amount it varies across cases.
+
+The Student's t distribution (t-test) describes how the mean of a sample with a certain number of observations is expected to behave.
+
+The P value tells you how confident you can be that each individual variable has some correlation with the dependent variable.
+
+The R-squared is the fraction of the variation in the dependent variable that is accounted for the independent variables.
+
+The adjusted-R squared same as R-squared but it penalize the model for taking unnecessary independent variables, more robust that R-squared.
+
+Now, we can make a backword elimination to eliminate independent varaibles with p-value > 0.05 significance level. I wrote a function to automate the elimination.
+
+
+```{r}
+backwardElimination <- function(x, sl) {
+    numVars = length(x)
+    for (i in c(1:numVars)){
+      regressor = lm(formula = Profit ~ ., data = x)
+      maxVar = max(coef(summary(regressor))[c(2:numVars), "Pr(>|t|)"])
+      if (maxVar > sl){
+        j = which(coef(summary(regressor))[c(2:numVars), "Pr(>|t|)"] == maxVar)
+        x = x[, -j]
+      }
+      numVars = numVars - 1
+    }
+    return(summary(regressor))
+  }
+  
+SL = 0.05
+backwardElimination(dataset, SL)
+```
+
+After elimination, we got only R.D Spend that has an influence on the profit. The model can be read as to increase the profit by one unit, we need to increase the R.D Spend by 8.563e-01 units, and by this variable, it  explains 94.5% of the model variablility. 
+
+## Conclusion
+
+To sum up, we can include that the model can be presented by a linear regression model. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

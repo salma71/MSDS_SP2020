@@ -1,0 +1,102 @@
+---
+title: "SElshahawy_Assign12"
+author: "Salma Elshahawy"
+date: "4/23/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Dataset importing
+
+```{r}
+library(RCurl)
+dataset = read.csv('who.csv', header = TRUE)
+head(dataset)
+```
+
+The dataset is 190 instances(observations) and 10 attributes(features) as the following:
+
+Country: name of the country
+LifeExp: average life expectancy for the country in years
+InfantSurvival: proportion of those surviving to one year or more
+Under5Survival: proportion of those surviving to five years or more
+TBFree: proportion of the population without TB.
+PropMD: proportion of the population who are MDs
+PropRN: proportion of the population who are RNs
+PersExp: mean personal expenditures on healthcare in US dollars at average exchange rate
+GovtExp: mean government expenditures per capita on healthcare, US dollars at average exchange rate TotExp: sum of personal and government expenditures.
+
+```{r}
+str(dataset)
+summary(dataset)
+```
+
+1. Provide a scatterplot of LifeExp~TotExp, and run simple linear regression. Do not transform the variables. Provide and interpret the F statistics, R^2, standard error,and p-values only. Discuss whether the assumptions of simple linear regression met.
+
+```{r}
+library(ggplot2)
+ggplot(dataset, aes(x = TotExp, y  = LifeExp)) + 
+  geom_point()
+```
+
+
+Simple linear regression
+
+```{r}
+regressor = lm(LifeExp ~ TotExp, data = dataset)
+summary(regressor)
+```
+
+P-value: is less than 0.05 significance level, so we can be sure that TotExp independent variable affecting the LifeExp.
+
+F-Statistic: should be used in combination with P-value to decide the significance level. In this example, we have only one independent variable - F-statistic value doesn't imply anything.
+
+R-squared: is the fraction of the variation in the dependent variable that is accounted for the independent variables.
+
+Std. Error is an estimate of the standard deviation of the coefficient, the amount it varies across cases.
+
+
+This model can not be presented by a simple linear regression. The Adjusted R-squared percent is too low, may be if we included more independent variables we can get a higher value. 
+
+As The below graph illusterated, the TotExp has a non-linear relationship with the LifeExp dependent variable.
+
+
+```{r}
+ggplot(dataset, aes(x = TotExp, y  = LifeExp)) + 
+  geom_point() +
+  geom_smooth(method = lm)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
