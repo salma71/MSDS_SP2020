@@ -22,7 +22,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Dataset importing
 
 ```{r}
-library(RCurl)
 dataset = read.csv('who.csv', header = TRUE)
 head(dataset)
 ```
@@ -44,7 +43,9 @@ str(dataset)
 summary(dataset)
 ```
 
-1. Provide a scatterplot of LifeExp~TotExp, and run simple linear regression. Do not transform the variables. Provide and interpret the F statistics, R^2, standard error,and p-values only. Discuss whether the assumptions of simple linear regression met.
+## 1. 
+
+Provide a scatterplot of LifeExp~TotExp, and run simple linear regression. Do not transform the variables. Provide and interpret the F statistics, R^2, standard error,and p-values only. Discuss whether the assumptions of simple linear regression met.
 
 ```{r}
 library(ggplot2)
@@ -60,25 +61,131 @@ regressor = lm(LifeExp ~ TotExp, data = dataset)
 summary(regressor)
 ```
 
-P-value: is less than 0.05 significance level, so we can be sure that TotExp independent variable affecting the LifeExp.
+P-value: is less than 0.05 significance level (2e-16) and F-Statistic is 65.26, so we can be sure that TotExp independent variable affecting the LifeExp. We can reject the null hypothesis. However, the R-squared is low (25.3%), which means that the model would explain only 25% of the model variability.
 
-F-Statistic: should be used in combination with P-value to decide the significance level. In this example, we have only one independent variable - F-statistic value doesn't imply anything.
-
-R-squared: is the fraction of the variation in the dependent variable that is accounted for the independent variables.
-
-Std. Error is an estimate of the standard deviation of the coefficient, the amount it varies across cases.
-
+Std. Error is an estimate of the standard deviation of the coefficient, the amount it varies across cases. 
 
 This model can not be presented by a simple linear regression. The Adjusted R-squared percent is too low, may be if we included more independent variables we can get a higher value. 
 
-As The below graph illusterated, the TotExp has a non-linear relationship with the LifeExp dependent variable.
+
+## 2. 
+
+Raise life expectancy to the 4.6 power (i.e., LifeExp^4.6). Raise total expenditures to the 0.06 power (nearly a log transform, TotExp^.06). Plot LifeExp^4.6 as a function of TotExp^.06, and r re-run the simple regression model using the transformed variables. Provide and interpret the F statistics, R^2, standard error, and p-values. Which model is "better?"
+
+```{r}
+# raise LifeExp to 4.6 power
+dataset$LifeExp_4.6 <- (dataset$LifeExp)^4.6
+# raise TotExp to 0.06 power 
+dataset$TotExp_0.06 <- (dataset$TotExp)^0.06
+head(dataset)
+```
 
 
 ```{r}
-ggplot(dataset, aes(x = TotExp, y  = LifeExp)) + 
-  geom_point() +
-  geom_smooth(method = lm)
+ggplot(dataset, aes(x = TotExp_0.06, y  = LifeExp_4.6)) + 
+  geom_point() 
 ```
+
+
+```{r}
+regressor_2 = lm(LifeExp_4.6 ~ TotExp_0.06, data = dataset)
+summary(regressor_2)
+```
+
+```{r}
+ggplot(data = dataset, aes(x = TotExp_0.06, y = LifeExp_4.6)) +
+geom_point() +
+stat_smooth(method = "lm", col = "dodgerblue3") +
+theme(panel.background = element_rect(fill = "white"),
+axis.line.x=element_line(),
+axis.line.y=element_line()) +
+ggtitle("Linear Model Fitted to Data")
+```
+
+```{r}
+plot(regressor_2$fitted.values, regressor_2$residuals,
+     xlab = 'fitted values',
+     ylab = 'residuals',
+     main = 'Residual plot')
+abline(h=0)
+```
+
+```{r}
+# Residuals Q-Q plot
+qqnorm(regressor_2$residuals)
+qqline(regressor_2$residuals)
+```
+
+P-value: is still less than 0.05 significance level (2e-16) ,but F-Statistic got higher 507.7, so we can be sure that TotExp independent variable affecting the LifeExp. We can reject the null hypothesis. Moreover, the R-squared got better as well (72.8%), which means that the model would explain about 72.8% of the model variability.
+
+Std. Error is an estimate of the standard deviation of the coefficient, the amount it varies across cases. 
+
+
+This model Definitly is better than the previous one.  
+
+
+## 3. 
+
+Using the results from 2, forecast life expectancy when TotExp^.06 =1.5. Then forecast life expectancy when TotExp^.06=2.5.
+
+```{r}
+predict(regressor_2, data.frame(TotExp_0.06=c(1.5, 2.5)), interval = 'predict')^(1/4.6)
+```
+
+
+## 4. 
+
+Build the following multiple regression model and interpret the F Statistics, R^2, standard error, and p-values. How good is the model?
+LifeExp = b0+b1 x PropMd + b2 x TotExp +b3 x PropMD x TotExp
+
+```{r}
+regressor_3 <- lm(LifeExp ~ PropMD + TotExp + TotExp:PropMD, data = dataset)
+summary(regressor_3)
+```
+
+```{r}
+plot(regressor_3$fitted.values, regressor_3$residuals,
+     xlab = 'fitted values',
+     ylab = 'residuals',
+     main = 'Residual plot')
+abline(h=0)
+```
+
+
+```{r}
+# Residuals Q-Q plot
+qqnorm(regressor_2$residuals)
+qqline(regressor_2$residuals)
+```
+
+
+Residual standard error is 8.765 and F-statistic is 34.49. Considering that average life expectancy is 67.38, the SE is not terrible and F-statistics is fairly high (but lower than in the first model). R2 is only 0.3574, so the model explains only 35.74% of variability, which is not high. P-value is nearly 0, so the relationship is not due to random variation.
+
+Looking at residuals plots it is clear that there is no constant variability and that residuals are not normally distributed. This is not a good model to describe the relationship. Kind of similar to the first model.
+
+
+## 5. 
+
+Forecast LifeExp when PropMD=.03 and TotExp = 14. Does this forecast seem realistic? Why or why not?
+
+
+```{r}
+predict(regressor_3, data.frame(PropMD = 0.03, TotExp = 14), interval = 'predict')
+```
+
+The prediction is 107.696 years with 95% confidence interval between 84.247 and 131.144. The prediction could be realistic but it is very rare. I don't think that it is a good model, The Adjusted R-squared in way too low to explain the variability of the model.  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
