@@ -70,66 +70,73 @@ $$y_2 = x_2 + 2$$
 
 ```{r}
 y_1 = function(x) {
-  return(x**2 - 2*x - 2)
+  return(x^2 - 2*x - 2)
 }
 
 y_2 = function(x) {
   return(x + 2)
 }
 
-x_1 <- seq(-3, 6, 0.05)
-plot(x_1, y_1(x_1), type='l', col="red", 
-     xlab="", ylab="")
-lines(x_1, y_2(x_1), col="green")
-abline(h=0)
+plot(y_1, -3, 6, col = 'red')
+plot(y_2, -3, 6, add=TRUE, col = 'blue')
+abline(h=0, col = 'brown')
 ```
 
-We need 4 point to find the are. Find roots of the quadratic function $f_1(x)$
+We need to solve the two equations for x to get the intersection points, (the intersection points are the bounds for the integral)
+
+$$x^{2}-2x-2=x+2$$
+
+$$x^{2}-3x-4=0$$
+$$x=4  \quad or \quad  x=-1$$
+
+$$A=\int _{ { \, a } }^{ { \, b } }{ { \left( \begin{array}{c} { { upper } } \\ { { function } } \end{array} \right) -\left( \begin{array}{c} { { lower } } \\ { { function } } \end{array} \right) \, dx } } $$
 
 ```{r}
-roots <- polyroot(c(-2, -2, 1))
-```
-
-the intersection of two functions should equal to zero
-
-$$(x^2-2x-2)-(x+2)=0$$
-
-$$x^2-3x-4=0$$
-
-
-```{r}
-intersects = polyroot(c(-4, -3, 1))
-```
-
-points are 
-
-```{r}
-points_x = c(intersects[1], roots, intersects[2])
-points_x
-```
-
-```{r}
-plot(x_1, y_1(x_1), type='l', col="red", 
-     xlab="", ylab="")
-lines(x_1, y_2(x_1), col="green")
-points(points_x, y_1(points_x))
-text(points_x, y_1(points_x), labels = c("a","b","c","d"), pos = 3)
-abline(h=0)
+# upper function is the y_2, lower function is the y_1
+area_1 <- integrate(y_1, -1, 4)
+area_2 <- integrate(y_2, -1, 4)
+area = (area_2$value - area_1$value)
+print(as.numeric(area))
 ```
 
 
-```{r message=FALSE, warning=FALSE}
-# Find individual parts
-a1 <- integrate(y_2, lower=points_x[1], upper=points_x[4])
-a2 <- integrate(y_1, lower=points_x[1], upper=points_x[2])
-a3 <- integrate(y_1, lower=points_x[3], upper=points_x[4])
-a4 <- integrate(y_1, lower=points_x[2], upper=points_x[3])
+## Question_5
 
-# Combine individual parts 
-# Last integral is negative because it is below the x-axis, so it needs to be negated
-area <- a1$value-a2$value-a3$value-a4$value
-area
-```
+A beauty supply store expects to sell 110 flat irons during the next year. It costs \$3.75 to store one flat iron for one year. There is a fixed cost of $8.25 for each order. Find the lot size and the number of orders per year that will minimize inventory costs.
+
+#of orders per year = n
+lot size = 110/n
+cost = lot size * store cost + fixed cost * n
+cost = 110/n
+
+assume half of the inventory are in stock
+
+$$cost = \frac { 110 }{ 2n } \times 3.75\quad +\quad 8.25n\\ $$
+$$cost = \frac { 206.25 }{ n } \quad +\quad 8.25n\\ $$
+take first integral for n
+
+$$\int { cost } \quad =\quad \int { \frac { 206.25 }{ n }  } +\quad 8.25n$$ 
+Now we can get the number of orders per year that will minimize the cost which is zero
+
+$$\quad -\frac { 206.25 }{ { n }^{ 2 } } \quad +\quad 8.25\quad =\quad 0 $$
+
+Solve for n we get that $n = 5$, $lot size = 22$
+
+## Question_6
+
+Use integration by parts to solve the integral below.
+$$\int{ln(9x) \cdot x^6 dx}$$
+
+$$=\frac { 1 }{ 7 } x^{ 7 }\times ln(9x)-\int { \frac { 1 }{ 7 } x^{ 7 }\times \frac { 1 }{ x } dx } \\ =\frac { 1 }{ 7 } x^{ 7 }\times ln(9x)-\int { \frac { 1 }{ 7 } x^{ 6 }dx } \\ =\frac { 7 }{ 49 } x^{ 7 }\times ln(9x)-\frac { 1 }{ 49 } x^{ 7 }+c\\ =\frac { 1 }{ 49 } x^{ 7 }(7ln(9x)-1)+c\\ $$
+
+## Question_7
+
+Determine whether $f(x)$ is a probability density function on the interval [1,e6]. If not, determine the value of the definite integral. $f(x) = \frac{1}{6x}$
+
+$$\int _{ 1 }^{ e^{ 6 } } \frac { 1 }{ 6x } dx\quad =\quad \frac { 1 }{ 6 } ln(x)|_{ 1 }^{ e^{ 6 } }\\ =\frac { 1 }{ 6 } ln(e^{ 6 })\quad -\quad \frac { 1 }{ 6 } ln(1)\\ =\frac { 1 }{ 6 } \times 6\quad \\ =1$$
+The definite integral of the function on interval [1,e6] is 1. Additionally, if x>0, then f(x)>0, so for this interval f(x)>0. As long as f(x)=0 outside of the given interval, this satisfies PDF requirements and this function is a probability density function.
+
+
 
 
 
