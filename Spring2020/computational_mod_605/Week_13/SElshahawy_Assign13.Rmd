@@ -47,3 +47,89 @@ The contamination level could be presented by
 
 $$N(t)= \frac{1050}{t^3}-220t+5700$$
 
+## Question_3
+
+Find the total area of the red rectangles in the figure below, where the equation of the line is $f(x) = 2x - 9$
+
+from the graph provided, we can see that each column have a width of 1 unit. The length can be found using the integration and substitute with the min and max value for the rectangle width. 
+
+```{r}
+eq = function(x) {
+  return (2*x - 9)
+}
+area = integrate(eq, 4.5, 8.5)
+print(area)
+```
+
+## Question_4
+
+Find the area of the region bounded by the graphs of the given equations.
+
+$$y_1 = x_1^2 - 2x_1-2$$
+$$y_2 = x_2 + 2$$
+
+```{r}
+y_1 = function(x) {
+  return(x**2 - 2*x - 2)
+}
+
+y_2 = function(x) {
+  return(x + 2)
+}
+
+x_1 <- seq(-3, 6, 0.05)
+plot(x_1, y_1(x_1), type='l', col="red", 
+     xlab="", ylab="")
+lines(x_1, y_2(x_1), col="green")
+abline(h=0)
+```
+
+We need 4 point to find the are. Find roots of the quadratic function $f_1(x)$
+
+```{r}
+roots <- polyroot(c(-2, -2, 1))
+```
+
+the intersection of two functions should equal to zero
+
+$$(x^2-2x-2)-(x+2)=0$$
+
+$$x^2-3x-4=0$$
+
+
+```{r}
+intersects = polyroot(c(-4, -3, 1))
+```
+
+points are 
+
+```{r}
+points_x = c(intersects[1], roots, intersects[2])
+points_x
+```
+
+```{r}
+plot(x_1, y_1(x_1), type='l', col="red", 
+     xlab="", ylab="")
+lines(x_1, y_2(x_1), col="green")
+points(points_x, y_1(points_x))
+text(points_x, y_1(points_x), labels = c("a","b","c","d"), pos = 3)
+abline(h=0)
+```
+
+
+```{r message=FALSE, warning=FALSE}
+# Find individual parts
+a1 <- integrate(y_2, lower=points_x[1], upper=points_x[4])
+a2 <- integrate(y_1, lower=points_x[1], upper=points_x[2])
+a3 <- integrate(y_1, lower=points_x[3], upper=points_x[4])
+a4 <- integrate(y_1, lower=points_x[2], upper=points_x[3])
+
+# Combine individual parts 
+# Last integral is negative because it is below the x-axis, so it needs to be negated
+area <- a1$value-a2$value-a3$value-a4$value
+area
+```
+
+
+
