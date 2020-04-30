@@ -79,7 +79,6 @@ y_2 = function(x) {
 
 plot(y_1, -3, 6, col = 'red')
 plot(y_2, -3, 6, add=TRUE, col = 'blue')
-abline(h=0, col = 'brown')
 ```
 
 We need to solve the two equations for x to get the intersection points, (the intersection points are the bounds for the integral)

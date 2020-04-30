@@ -1,0 +1,57 @@
+---
+title: "Discussion_14"
+author: "Salma Elshahawy"
+date: "4/29/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Chapter 7 Section 4 Exercise 6, page 386, 
+textbook: [Apex Calculus 1]('https://open.umn.edu/opentextbooks/textbooks/198')
+
+Find the arc length of the function on the given interval.
+
+$$7. \quad f(x) = \frac{1}{12}x^{3}-\frac{1}{x} \quad on \quad [1, 4]$$
+
+
+
+
+```{r}
+y = function(x) {
+  return((1/12*(x^3)) - (x^-1))
+}
+
+```
+
+```{r}
+## draw the arc to investigate the shape
+## 
+x = seq(0, 5, 0.1)
+plot(x, y(x), type = 'l', col ='red')
+```
+
+
+```{r}
+library(pracma)
+# Parameterize x as a function of y
+f_x <- function(x){
+  c(x, y(x))
+}
+print(arclength(f_x, 1, 4)$length)
+```
+
+
+
