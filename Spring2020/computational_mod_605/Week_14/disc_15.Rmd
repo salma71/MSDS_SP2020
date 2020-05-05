@@ -1,0 +1,37 @@
+---
+title: "Discussion_15"
+author: "Salma Elshahawy"
+date: "5/4/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Chapter 8, page 496, 
+textbook: [Apex Calculus 1]('https://open.umn.edu/opentextbooks/textbooks/198')
+
+
+In Exercises 21-24, write out the first 5 terms of the Binomial series with the given k-value
+
+$f(x) = (1+x)^{k}$  when $k = 4$
+
+$$k^{0}x^{0} + k^{1}x^{1} + \frac{k(k-1)}{2!}x^2 + \frac{k(k-1)(k-2)}{3!}x^3 + \frac{k(k-1)(k-2)(k-3)}{4!}x^4$$
+
+$$(1\times 1)+({ 4 }x)+(\frac { 4(4-1) }{ 2! } x^{ 2 })+(\frac { 4(4-1)(4-2) }{ 3! } x^{ 3 })+(\frac { 4(4-1)(4-2)(4-3) }{ 4! } x^{ 4 })$$
+$$1+({ 4 }x)+(6x^{ 2 })+(4x^{ 3 })+(x^{ 4 })$$
+
+
+
+
