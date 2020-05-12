@@ -138,7 +138,6 @@ train1_cat<-train[cat_var]
 train1_num<-train[numeric_var]
 ```
 
-
 ```{r}
 library(ggplot2)
 ## Bar plot/Density plot function
@@ -197,17 +196,145 @@ doPlots(train1_cat, fun = plotHist, ii = 13:18, ncol = 2)
 doPlots(train1_cat, fun = plotHist, ii = 19:22, ncol = 2)
 ```
 
-```{r}
+```{r,  fig.width=4, fig.height=2.5}
 ggplot(train, aes(x = Neighborhood, y = SalePrice)) +
   geom_boxplot() +
   geom_hline(aes(yintercept=80), 
              colour='red', linetype='dashed', lwd=2) +
   scale_y_continuous(labels=dollar_format()) +
-  theme(axis.text.x = element_text(angle = 45))
+  theme(axis.text.x = element_text(angle = 90))
 ```
 
 Boxplot between the neighboorhoods and sale price shows that BrookSide and South & West of Iowa State University have cheap houses. While Northridge and Northridge Heights are rich neighborhoods with several outliers in terms of price.
 
+
+
+```{r, fig.width=8, fig.height=8}
+library(psych)
+correlations <- cor(na.omit(train1_num[,-1])) # omit the id
+row_indic <- apply(correlations, 1, function(x) sum(x > 0.3 | x < -0.3) > 1)
+correlations<- correlations[row_indic ,row_indic ]
+corrplot(correlations, method="square")
+
+ggcorr(correlations, palette = "RdBu", label = TRUE)
+```
+
+```{r}
+# mat : is a matrix of data
+# ... : further arguments to pass to the native R cor.test function
+cor.mtest <- function(mat, ...) {
+    mat <- as.matrix(mat)
+    n <- ncol(mat)
+    p.mat<- matrix(NA, n, n)
+    diag(p.mat) <- 0
+    for (i in 1:(n - 1)) {
+        for (j in (i + 1):n) {
+            tmp <- cor.test(mat[, i], mat[, j], ...)
+            p.mat[i, j] <- p.mat[j, i] <- tmp$p.value
+        }
+    }
+  colnames(p.mat) <- rownames(p.mat) <- colnames(mat)
+  p.mat
+}
+# matrix of the p-value of the correlation
+p.mat <- cor.mtest(train1_num[,-1])
+(p.mat[, 1:5])
+
+```
+
+```{r, fig.width=8, fig.height=8}
+# Leave blank on no significant coefficient
+corrplot(correlations, type="upper", order="hclust", 
+         p.mat = p.mat, sig.level = 0.05, method = 'pie' ,insig = "blank")
+```
+
+## scatterplot for the most significance variables with the target(SalesPrice)
+
+```{r message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
+
+signif_col <- train1_num %>%
+  select(YearBuilt, FullBath, OverallQual, GrLivArea, TotRmsAbvGrd, X2ndFlrSF, SalePrice)
+# options(repr.plot.width = 20, repr.plot.height = 20)
+ggpairs(signif_col)
+```
+
+## The correlation plot
+
+```{r}
+corr <- train1_num %>%
+  select(SalePrice, TotRmsAbvGrd, GrLivArea)
+ggcorr(drop_na(corr), palette = "RdBu", label = TRUE)
+```
+
+Test the hypotheses:
+
+- H0: The correlation is zero.
+- H1: The correlation is not zero.
+- Significance level is 0.05.
+
+```{r}
+(tot_vs_sal <- cor.test(corr$TotRmsAbvGrd, corr$SalePrice, method = 'pearson'))
+(gr_vs_tot <- cor.test(corr$GrLivArea, corr$TotRmsAbvGrd, method = 'pearson'))
+(gr_vs_sal <- cor.test(corr$GrLivArea, corr$SalePrice, method = 'pearson'))
+```
+
+
+The p-value in the three varaibles is below significance level of 0.05 - around 2.2e-16. This implies that the correlation falls within the c(0.8, 0.2) confidence interval and we failed to accept the null **hypothese** which assumes that the correlation is zero.
+
+The 80% confidence interval
+
+```{r}
+library(psychometric)
+(CIr(r = tot_vs_sal$estimate, n = nrow(corr), level = 0.8))
+(CIr(r = gr_vs_sal$estimate, n = nrow(corr), level = 0.8))
+(CIr(r = gr_vs_tot$estimate, n = nrow(corr), level = 0.8))
+```
+
+
+
+To calculate the familywize error (type-I error) $FWE <= 1-(1-alpha)^c$ where:  
+1. $alpha$ is the alpha level for an individual test - in this case it is 0.05. 
+2. $c$ is the number of comparisons, which is 3.
+
+```{r}
+perc <- (1 - (1 - 0.05)^3)
+cat(sprintf("The probability of a type-I error is : %s%s\n", perc, " "))
+```
+
+Yes, I would be worry about that probability, which is very high considering only three tests were performed.
+
+## Linear Algebra and Correlation 
+
+Invert your correlation matrix from above. (This is known as the precision matrix and contains variance inflation factors on the diagonal.) Multiply the correlation matrix by the precision matrix, and then multiply the precision matrix by the correlation matrix. Conduct LU decomposition on the matrix.
+
+```{r}
+cor_mat <- data.matrix(cor(corr))
+rownames(cor_mat) <- c()
+colnames(cor_mat) <- c()
+(cor_mat2 <- round(cor_mat, 2))
+```
+
+The determinant of the correlation matrix not zero, the matrix has an inverse
+
+```{r}
+library(matlib)
+det(cor_mat2) # get determinant
+(cor_inv <- inv(cor_mat2)) # get the inverse matrix
+(by_inv <- cor_mat2 %*% cor_inv)
+(res <- round(by_inv, 1))
+```
+
+get the inverse 
+```{r}
+library(matrixcalc)
+# LU decomposition 
+
+(cor_lu <- lu.decomposition(cor_mat2))
+# multiply L and U 
+# 
+(cor_lu$L %*% cor_lu$U) 
+
+```
 
 
 
