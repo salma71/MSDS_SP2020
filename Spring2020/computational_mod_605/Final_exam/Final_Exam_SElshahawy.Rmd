@@ -1,0 +1,215 @@
+---
+title: "Final_Exam"
+author: "Salma Elshahawy"
+date: "5/11/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+Your final is due by the end of the last week of class.  You should post your solutions to your GitHub account or RPubs.  You are also expected to make a short presentation via YouTube  and post that recording to the board.  This project will show off your ability to understand the elements of the class.
+
+## Problem 1
+
+Using R, generate a random variable X that has 10,000 random uniform numbers from 1 to N, where N can be any number of your choosing greater than or equal to 6.  
+
+```{r}
+set.seed(123)
+X <- runif(10000, 1, 8)
+X
+```
+
+Then generate a random variable Y that has 10,000 random normal numbers with a mean of $μ=σ=(N+1)/2$.
+
+```{r}
+set.seed(123)
+N <- 10000
+me <- (N+1)/2
+sd <- me
+Y <- rnorm(N, mean = me, sd = sd)
+Y
+```
+
+
+**Probability.**  Calculate as a minimum the below probabilities a through c.  Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
+
+```{r}
+x <- median(X)
+round(x, 2)
+y <- quantile(Y, 0.25)
+y[[1]]
+```
+
+- a.   P(X>x | X>y)
+
+```{r}
+```
+
+## Problem 2
+
+```{r}
+library('ggplot2')
+library('ggthemes') 
+library('scales')
+library('dplyr') 
+library('mice')
+library('randomForest') 
+library('data.table')
+library('gridExtra')
+library('corrplot') 
+library('GGally')
+library('e1071')
+```
+
+loading dataset 
+
+```{r}
+library(RCurl)
+train <- read.csv('https://raw.githubusercontent.com/salma71/houses_prices_kaggle/master/datasets/train.csv', stringsAsFactors = F)
+head(train)
+colnames(train)
+```
+
+Identify the target variable which is the SalePrice
+
+```{r}
+target <- train$SalePrice
+summary(target)
+```
+
+## Univariate analysis
+
+```{r}
+dim(train)
+str(train)
+```
+
+```{r}
+#Count the number of columns that consists of text data
+
+sum(sapply(train[,1:81], typeof) == "character")
+```
+
+```{r}
+#Count the number of columns that consists of numerical data
+
+sum(sapply(train[,1:81], typeof) == "integer")
+```
+
+We have 43 columns that consist of text and 38 columns are numerical.let’s take a look at some descriptive statistics
+
+```{r}
+# Obtain summary statistics
+
+summary(train[,sapply(train[,1:81], typeof) == "integer"])
+```
+
+As we can see from the summary statistics above, there are some outliers needs to be proceessed. It would be clear to identify which dependant variables that need processing after visualization.
+
+```{r}
+# The percentage of data missing in train
+
+cat(sprintf("Percentage of missing values in the overall train dataset: %s%s\n", round(length(which(is.na(train) == TRUE)) * 100 / (nrow(train) * ncol(train)), 2), "%"))
+```
+
+## Visualization 
+
+Creating one training dataset with categorical variable and one with numeric variable. We will use this for data visualization.
+
+```{r}
+cat_var <- names(train)[which(sapply(train, is.character))]
+cat_car <- c(cat_var, 'BedroomAbvGr', 'HalfBath', ' KitchenAbvGr','BsmtFullBath', 'BsmtHalfBath', 'MSSubClass')
+numeric_var <- names(train)[which(sapply(train, is.numeric))]
+train1_cat<-train[cat_var]
+train1_num<-train[numeric_var]
+```
+
+
+```{r}
+library(ggplot2)
+## Bar plot/Density plot function
+
+## Bar plot function
+
+plotHist <- function(data_in, i) 
+{
+  data <- data.frame(x=data_in[[i]])
+  p <- ggplot(data=data, aes(x=factor(x))) + stat_count() + xlab(colnames(data_in)[i]) + theme_light() + 
+    theme(axis.text.x = element_text(angle = 90, hjust =1))
+  return (p)
+}
+
+## Density plot function
+
+plotDen <- function(data_in, i){
+  data <- data.frame(x=data_in[[i]], SalePrice = data_in$SalePrice)
+  p <- ggplot(data= data) + geom_line(aes(x = x), stat = 'density', size = 1,alpha = 1.0) +
+    xlab(paste0((colnames(data_in)[i]), '\n', 'Skewness: ',round(skewness(data_in[[i]], na.rm = TRUE), 2))) + theme_light() 
+  return(p)
+  
+}
+
+## Function to call both Bar plot and Density plot function
+
+doPlots <- function(data_in, fun, ii, ncol=3) 
+{
+  pp <- list()
+  for (i in ii) {
+    p <- fun(data_in=data_in, i=i)
+    pp <- c(pp, list(p))
+  }
+  do.call("grid.arrange", c(pp, ncol=ncol))
+}
+
+
+## Barplots for the categorical features
+
+doPlots(train1_cat, fun = plotHist, ii = 1:4, ncol = 2)
+```
+
+```{r}
+doPlots(train1_cat, fun = plotHist, ii = 5:8, ncol = 2)
+```
+
+```{r}
+doPlots(train1_cat, fun = plotHist, ii = 9:12, ncol = 2)
+```
+
+```{r}
+doPlots(train1_cat, fun = plotHist, ii = 13:18, ncol = 2)
+```
+
+```{r}
+doPlots(train1_cat, fun = plotHist, ii = 19:22, ncol = 2)
+```
+
+```{r}
+ggplot(train, aes(x = Neighborhood, y = SalePrice)) +
+  geom_boxplot() +
+  geom_hline(aes(yintercept=80), 
+             colour='red', linetype='dashed', lwd=2) +
+  scale_y_continuous(labels=dollar_format()) +
+  theme(axis.text.x = element_text(angle = 45))
+```
+
+Boxplot between the neighboorhoods and sale price shows that BrookSide and South & West of Iowa State University have cheap houses. While Northridge and Northridge Heights are rich neighborhoods with several outliers in terms of price.
+
+
+
+
+
+
