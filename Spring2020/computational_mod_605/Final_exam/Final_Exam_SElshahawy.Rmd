@@ -337,6 +337,72 @@ library(matrixcalc)
 ```
 
 
+**Calculus-Based Probability & Statistics.**  Many times, it makes sense to fit a closed form distribution to data.  Select a variable in the Kaggle.com training dataset that is skewed to the right, shift it so that the minimum value is absolutely above zero if necessary.  Then load the MASS package and run fitdistr to fit an exponential probability density function.  (See  https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/fitdistr.html ).  Find the optimal value of λ for this distribution, and then take 1000 samples from this exponential distribution using this value (e.g., rexp(1000, λ)).  Plot a histogram and compare it with a histogram of your original variable. Using the exponential pdf, find the 5th and 95th percentiles using the cumulative distribution function (CDF).   Also generate a 95% confidence interval from the empirical data, assuming normality.  Finally, provide the empirical 5th percentile and 95th percentile of the data.  Discuss.
+
+
+
+```{r}
+fit_data <- train$MasVnrArea
+fit_data <- fit_data[complete.cases(fit_data)]
+hist(fit_data)
+summary(fit_data)
+```
+
+```{r}
+length(fit_data[fit_data == 0])
+```
+Out of the 1452 houses, there are 861 that have no masonry veneers (area is zero).
+
+
+Because the data measures area, adding a value of .01 should be negligible and would get rid of the zero values. A property with a masonry veneer area of .01 square feet would mean this property does not really have any masonry veneer.
+
+
+```{r}
+fit_data <- fit_data + .01
+hist(fit_data)
+summary(fit_data)
+```
+
+```{r}
+library(MASS)
+fit <- fitdistr(fit_data, densfun = "exponential")
+# the optimal value
+fit$estimate
+```
+
+```{r}
+exp <- rexp(length(fit_data), rate = fit$estimate) 
+hist(exp)
+```
+
+```{r}
+qexp(.05, rate=fit$estimate)
+qexp(.95, rate=fit$estimate)
+```
+
+```{r}
+norm.interval = function(data, variance = var(data), conf.level = 0.95) 
+{
+      z = qnorm((1 - conf.level)/2, lower.tail = FALSE)
+      xbar = mean(data)
+      sdx = sqrt(variance/length(data))
+      c(xbar - z * sdx, xbar + z * sdx)
+}
+
+norm.interval(fit_data, variance=var(fit_data), conf.level = 0.95)
+```
+
+
+```{r}
+quantile(x=fit_data, probs=c(.05, .95))
+```
+
+**Modeling.**  Build some type of multiple regression  model and submit your model to the competition board.  Provide your complete model summary and results with analysis.  Report your Kaggle.com user name and score.
+
+
+
+
+
 
 
 
