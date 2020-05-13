@@ -1,0 +1,128 @@
+---
+title: "House prices_Advance regression techniques_Kaggle"
+author: "Salma Elshahawy"
+date: "5/13/2020"
+output: 
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    df_print: paged
+  pdf_document:
+    extra_dependencies: geometry
+    keep_tex: yes
+    latex_engine: xelatex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load liberaries 
+
+```{r message=FALSE, warning=FALSE}
+library(missForest)     # Imputing the missing values from dataset
+library(doParallel)     # Parallel processing of missForest
+library(caret)          # Using Caret package for Cross Validation
+library(e1071)          # Explore the Skewness of various features of the dataset.
+library(elasticnet)     # Dependency for ridge regression model
+library(randomForest)   # Dependeny for random forest regression
+```
+
+## loading dataset 
+
+```{r}
+library(RCurl)
+train <- read.csv('https://raw.githubusercontent.com/salma71/houses_prices_kaggle/master/datasets/train.csv')
+test <- read.csv('https://raw.githubusercontent.com/salma71/houses_prices_kaggle/master/datasets/test.csv')
+```
+
+## Remove the taget variable from train data and combine train and test datasets
+
+```{r}
+SalePrice = train$SalePrice 
+train$SalePrice = NULL
+
+house <- rbind(train,test)
+```
+
+
+```{r}
+library(doParallel)
+registerDoParallel(cores = 3)
+set.seed(999)
+```
+
+```{r}
+house.mis <- missForest(xmis = house, maxiter = 10, ntree = 10, variablewise = FALSE,
+                           decreasing = FALSE, verbose = TRUE, mtry = floor(sqrt(ncol(house))), replace = TRUE,
+                           classwt = NULL, cutoff = NULL, strata = NULL, sampsize = NULL, nodesize = NULL, 
+                           maxnodes = NULL, xtrue = NA, parallelize = "variables")
+
+```
+
+```{r}
+house <- house.mis$ximp
+```
+
+```{r}
+classes <- lapply(house,function(x) class(x))
+numeric_feats <- names(classes[classes=="integer" | classes=="numeric"])
+factor_feats <- names(classes[classes=="factor"| classes=="character"])
+
+skewed_feats <- sapply(numeric_feats, function(x) skewness(house[[x]]))
+skewed_feats <- skewed_feats[abs(skewed_feats) > .75]
+```
+
+
+```{r}
+for (x in names(skewed_feats)) {house[[x]] <- log(house[[x]]+1)}
+```
+
+```{r}
+library(caret)
+dummies <- dummyVars(~., data = house)
+housenum <- data.frame(predict(dummies, newdata = house))
+```
+
+```{r}
+trainnum <- housenum[1 : nrow(train),]
+
+testnum <- housenum[nrow(train) + 1 : nrow(test),]
+```
+
+```{r}
+trainnum <- cbind(trainnum, SalePrice)
+```
+
+
+```{r}
+rf_model <- train(SalePrice~., data=trainnum, method="rf",metric="RMSE",
+                     maximize=FALSE,trControl=trainControl(method="repeatedcv",number=5),
+                     tuneGrid=expand.grid(mtry = c(5)), importance = T, allowParallel = T, prox = T)
+```
+
+
+```{r}
+rf_model$results
+```
+
+```{r}
+varImp(rf_model)
+```
+
+
+```{r}
+rfpreds <- round(predict(rf_model,newdata = testnum), 2)
+
+write.csv(data.frame(Id=test$Id,SalePrice=rfpreds),"random_forest_preds.csv",row.names = F)
+```
+
+
+
+
+
+
+
+

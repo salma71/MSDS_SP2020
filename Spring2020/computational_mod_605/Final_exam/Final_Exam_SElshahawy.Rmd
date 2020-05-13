@@ -30,7 +30,7 @@ Using R, generate a random variable X that has 10,000 random uniform numbers fro
 ```{r}
 set.seed(123)
 X <- runif(10000, 1, 8)
-X
+
 ```
 
 Then generate a random variable Y that has 10,000 random normal numbers with a mean of $μ=σ=(N+1)/2$.
@@ -41,7 +41,7 @@ N <- 10000
 me <- (N+1)/2
 sd <- me
 Y <- rnorm(N, mean = me, sd = sd)
-Y
+
 ```
 
 
@@ -61,7 +61,7 @@ y[[1]]
 
 ## Problem 2
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library('ggplot2')
 library('ggthemes') 
 library('scales')
@@ -98,13 +98,10 @@ dim(train)
 str(train)
 ```
 
-```{r}
-#Count the number of columns that consists of text data
 
+```{r}
 sum(sapply(train[,1:81], typeof) == "character")
-```
 
-```{r}
 #Count the number of columns that consists of numerical data
 
 sum(sapply(train[,1:81], typeof) == "integer")
@@ -173,28 +170,38 @@ doPlots <- function(data_in, fun, ii, ncol=3)
   }
   do.call("grid.arrange", c(pp, ncol=ncol))
 }
+```
 
+The bar plots below offer more insight into the data. MSZoning: bar plot indicates that majority of the houses are located in low density residential areas and medium density residential area.
 
+The type of road access to the property tends to be paved and the houses do not have alleys.
+
+Landcontour: the houses are built on flat properties
+Utilities: Almost all homes have all public utilities (E,G,W, & S)
+LandSlope: most of the properties have a gentle slope
+
+```{r, fig.width=10, fig.height= 10}
 ## Barplots for the categorical features
 
-doPlots(train1_cat, fun = plotHist, ii = 1:4, ncol = 2)
+doPlots(train1_cat, fun = plotHist, ii = 1:11, ncol = 4)
+doPlots(train1_cat, fun = plotHist, ii = 12:22, ncol = 4)
 ```
 
-```{r}
-doPlots(train1_cat, fun = plotHist, ii = 5:8, ncol = 2)
-```
+The houses that have sever landslope are located in the Clear Creek and Timberland. The houses with moderate landslope are present in more neighborhood. The Clear Creek and the Crawford neighborhoods seem to have high slopes.
 
 ```{r}
-doPlots(train1_cat, fun = plotHist, ii = 9:12, ncol = 2)
+train %>% 
+  select(LandSlope, Neighborhood, SalePrice) %>% 
+  filter(LandSlope == c('Sev', 'Mod')) %>% 
+  arrange(Neighborhood) %>% 
+  group_by(Neighborhood, LandSlope) %>% 
+  summarize(Count = n()) %>% 
+  ggplot(aes(Neighborhood, Count)) + 
+  geom_bar(aes(fill = LandSlope), position = 'dodge', stat = 'identity') + 
+  theme_light() + 
+  theme(axis.text.x = element_text(angle = 90, hjust =1))
 ```
 
-```{r}
-doPlots(train1_cat, fun = plotHist, ii = 13:18, ncol = 2)
-```
-
-```{r}
-doPlots(train1_cat, fun = plotHist, ii = 19:22, ncol = 2)
-```
 
 ```{r,  fig.width=4, fig.height=2.5}
 ggplot(train, aes(x = Neighborhood, y = SalePrice)) +
@@ -207,6 +214,10 @@ ggplot(train, aes(x = Neighborhood, y = SalePrice)) +
 
 Boxplot between the neighboorhoods and sale price shows that BrookSide and South & West of Iowa State University have cheap houses. While Northridge and Northridge Heights are rich neighborhoods with several outliers in terms of price.
 
+
+```{r, fig.width=10, fig.height= 11, warning=FALSE, message=False}
+doPlots(train1_num, fun = plotDen, ii = 2:23, ncol = 4)
+```
 
 
 ```{r, fig.width=8, fig.height=8}
@@ -250,6 +261,45 @@ corrplot(correlations, type="upper", order="hclust",
 
 ## scatterplot for the most significance variables with the target(SalesPrice)
 
+```{r message=FALSE, warning=FALSE, fig.width=10, fig.height=10}
+plotCorr <- function(data_in, i){
+  data <- data.frame(x = data_in[[i]], SalePrice = data_in$SalePrice)
+  p <- ggplot(data, aes(x = x, y = SalePrice)) + 
+    geom_point(shape = 1, na.rm = TRUE) + 
+    geom_smooth(method = lm ) + 
+    xlab(paste0(colnames(data_in)[i], '\n', 'R-Squared: ', round(cor(data_in[[i]], data$SalePrice, use = 'complete.obs'), 2))) + 
+    theme_light()
+  return(suppressWarnings(p))
+}
+
+
+highcorr <- c(names(correlations[,'SalePrice'])[which(correlations[,'SalePrice'] > 0.5)], names(correlations[,'SalePrice'])[which(correlations[,'SalePrice'] < -0.2)])
+ 
+data_corr <- train[,highcorr]
+
+
+doPlots(data_corr, fun = plotCorr, ii = 1:11)
+```
+
+The histogram for the response variable SalePrice shows that it is skewed. Taking the log of the variable normalizes it.
+
+
+```{r message=FALSE, warning=FALSE}
+library(scales)
+ggplot(train, aes(x=SalePrice)) + 
+  geom_histogram(col = 'white') + 
+  theme_light() + 
+  scale_x_continuous(labels = comma)
+```
+
+```{r}
+#Normalize distribution
+ggplot(train, aes(x=log(SalePrice+1))) + 
+  geom_histogram(col = 'white') + 
+  theme_light()
+```
+
+
 ```{r message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
 
 signif_col <- train1_num %>%
@@ -263,7 +313,7 @@ ggpairs(signif_col)
 ```{r}
 corr <- train1_num %>%
   select(SalePrice, TotRmsAbvGrd, GrLivArea)
-ggcorr(drop_na(corr), palette = "RdBu", label = TRUE)
+ggcorr(tidyr::drop_na(corr), palette = "RdBu", label = TRUE)
 ```
 
 Test the hypotheses:
@@ -283,7 +333,7 @@ The p-value in the three varaibles is below significance level of 0.05 - around 
 
 The 80% confidence interval
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(psychometric)
 (CIr(r = tot_vs_sal$estimate, n = nrow(corr), level = 0.8))
 (CIr(r = gr_vs_sal$estimate, n = nrow(corr), level = 0.8))
@@ -316,7 +366,7 @@ colnames(cor_mat) <- c()
 
 The determinant of the correlation matrix not zero, the matrix has an inverse
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(matlib)
 det(cor_mat2) # get determinant
 (cor_inv <- inv(cor_mat2)) # get the inverse matrix
@@ -325,7 +375,7 @@ det(cor_mat2) # get determinant
 ```
 
 get the inverse 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(matrixcalc)
 # LU decomposition 
 
@@ -363,7 +413,7 @@ hist(fit_data)
 summary(fit_data)
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(MASS)
 fit <- fitdistr(fit_data, densfun = "exponential")
 # the optimal value
@@ -396,13 +446,6 @@ norm.interval(fit_data, variance=var(fit_data), conf.level = 0.95)
 ```{r}
 quantile(x=fit_data, probs=c(.05, .95))
 ```
-
-**Modeling.**  Build some type of multiple regression  model and submit your model to the competition board.  Provide your complete model summary and results with analysis.  Report your Kaggle.com user name and score.
-
-
-
-
-
 
 
 
