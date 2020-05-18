@@ -29,7 +29,9 @@ Using R, generate a random variable X that has 10,000 random uniform numbers fro
 
 ```{r}
 set.seed(123)
-X <- runif(10000, 1, 8)
+N <- runif(1, 8, 1000)
+n <- 10000
+X <- runif(n, min = 0, max = N)
 
 ```
 
@@ -37,27 +39,99 @@ Then generate a random variable Y that has 10,000 random normal numbers with a m
 
 ```{r}
 set.seed(123)
-N <- 10000
 me <- (N+1)/2
 sd <- me
-Y <- rnorm(N, mean = me, sd = sd)
+Y <- rnorm(n, mean = me, sd = sd)
 
 ```
 
 
-**Probability.**  Calculate as a minimum the below probabilities a through c.  Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
+**Probability.**  Calculate as a minimum the below probabilities a through c. Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
 
 ```{r}
-x <- median(X)
-round(x, 2)
-y <- quantile(Y, 0.25)
-y[[1]]
+(x <- median(X))
+(y <- quantile(Y, 0.25)[[1]])
 ```
 
 - a.   P(X>x | X>y)
 
+$$P(X>x | X>y) = \frac{P(X>145.0453) \quad& P(X>48.85452) }{P(X>48.85452)}$$
+
+
 ```{r}
+(p_a <- sum(X>x & X>y)/n)
+(p_xy <- sum(X>y)/n) 
+(p_a/p_xy)
 ```
+0.6 is the probability that X is **greater than** its median given that X is **greater than** the first quartile of Y.
+
+- b. P(X>x , Y>y)
+
+$$P(X>x , X>y) = {P(X>145.0453) . P(Y>48.85452) }$$
+
+```{r}
+(p_b <- sum(X>x & Y>y)/n)
+```
+
+0.36 is the probability that X and Y are **greater than** all possible x and y. 
+
+- c. P(X<x | X>y)
+
+$$P(X<x | X>y) = \frac{P(X<145.0453) . P(X>48.85452) }{P(X>48.85452)}$$
+
+
+```{r}
+(p_c <- sum(X<x & X>y)/n)
+(p_xy <- sum(X>y)/n) 
+(p_c/p_xy)
+```
+
+0.39 is the probability of X **less than** its median **and greater than** the first quantile of Y.
+
+
+Investigate whether $P(X>x \quad and \quad  Y>y)=P(X>x)P(Y>y)$ by building a table and evaluating the marginal and joint probabilities.
+
+```{r}
+(res <- matrix(c(sum(X>x & Y<y),sum(X>x & Y>y), sum(X<x & Y<y),sum(X<x & Y>y)),  ncol = 2, nrow = 2))
+res <- cbind(res,c(res[1,1] + res[1,2], res[2,1] + res[2,2]))
+res <- rbind(res,c(res[1,1] + res[2,1], res[1,2] + res[2,2], res[1,3] + res[2,3]))
+(results <- as.data.frame(res))
+results
+colnames(results) <- c("X>x", "X<x", "total")
+rownames(results)  <- c("Y<y", "Y>y", "total")
+
+results
+```
+
+Probability matrix 
+
+```{r}
+(prob_tab <- results/n)
+```
+
+Check $P(X>x \quad and \quad  Y>y)=P(X>x)P(Y>y)$
+Check the right side : $P(X>x)P(Y>y)$ from the table we get
+
+```{r}
+(round(0.5*0.75, 2))
+```
+
+Check the leftside: $P(X>x \quad and \quad  Y>y)$ from the table = 0.369 ~ 0.38
+
+Since the results are so similar we can conclude that both X and Y are independent variable
+
+Check to see if independence holds by using Fisher’s Exact Test and the Chi Square Test.  What is the difference between the two? Which is most appropriate?
+
+```{r}
+fisher.test(results,simulate.p.value=TRUE)
+```
+
+
+```{r}
+chisq.test(results, correct=TRUE)
+```
+
+**"Fisher's exact test"** is a test for comparing two proportions that is conditional on the marginal frequencies. The test is exact in guaranteeing that the type I error is less than or equal to what you specify. It can however be much less. P-values are too large and power is lost. In this sense ordinary **chi-square tests** are generally "more accurate" than "exact" tests. In addition, the old adage that chi-square tests are not accurate if an expected cell frequency is less than 5 is not correct.
 
 ## Problem 2
 
@@ -215,7 +289,7 @@ ggplot(train, aes(x = Neighborhood, y = SalePrice)) +
 Boxplot between the neighboorhoods and sale price shows that BrookSide and South & West of Iowa State University have cheap houses. While Northridge and Northridge Heights are rich neighborhoods with several outliers in terms of price.
 
 
-```{r, fig.width=10, fig.height= 11, warning=FALSE, message=False}
+```{r, fig.width=10, fig.height= 11}
 doPlots(train1_num, fun = plotDen, ii = 2:23, ncol = 4)
 ```
 
