@@ -115,8 +115,9 @@ varImp(rf_model)
 
 ```{r}
 rfpreds <- round(predict(rf_model,newdata = testnum), 2)
-
-write.csv(data.frame(Id=test$Id,SalePrice=rfpreds),"random_forest_preds.csv",row.names = F)
+submission <- data.frame(Id=test$Id,SalePrice=rfpreds)
+head(submission)
+write.csv(submission,"random_forest_preds.csv",row.names = F)
 ```
 
 

@@ -131,9 +131,11 @@ fisher.test(results,simulate.p.value=TRUE)
 chisq.test(results, correct=TRUE)
 ```
 
-**"Fisher's exact test"** is a test for comparing two proportions that is conditional on the marginal frequencies. The test is exact in guaranteeing that the type I error is less than or equal to what you specify. It can however be much less. P-values are too large and power is lost. In this sense ordinary **chi-square tests** are generally "more accurate" than "exact" tests. In addition, the old adage that chi-square tests are not accurate if an expected cell frequency is less than 5 is not correct.
+**"Fisher's exact test"** is a way to test the association between two categorical variables when you have small cell sizes (expected values less than 5). While, **Chi-square** test is used when the cell sizes are expected to be large. If the sample size is small (or expected cell sizes <5),Fisher's exact test should be used. Otherwise, the two tests will give relatively the same answers. With large cell sizes, their answer should be very similar.
 
 ## Problem 2
+
+Load libraries
 
 ```{r message=FALSE, warning=FALSE}
 library('ggplot2')
@@ -141,6 +143,7 @@ library('ggthemes')
 library('scales')
 library('dplyr') 
 library('mice')
+library('RCurl')
 library('randomForest') 
 library('data.table')
 library('gridExtra')
@@ -149,13 +152,18 @@ library('GGally')
 library('e1071')
 ```
 
-loading dataset 
+Load dataset 
 
 ```{r}
-library(RCurl)
 train <- read.csv('https://raw.githubusercontent.com/salma71/houses_prices_kaggle/master/datasets/train.csv', stringsAsFactors = F)
 head(train)
 colnames(train)
+```
+
+```{r}
+test <- read.csv('https://raw.githubusercontent.com/salma71/houses_prices_kaggle/master/datasets/test.csv', stringsAsFactors = F)
+head(test)
+colnames(test)
 ```
 
 Identify the target variable which is the SalePrice
@@ -185,16 +193,23 @@ We have 43 columns that consist of text and 38 columns are numerical.let’s tak
 
 ```{r}
 # Obtain summary statistics
-
 summary(train[,sapply(train[,1:81], typeof) == "integer"])
 ```
 
-As we can see from the summary statistics above, there are some outliers needs to be proceessed. It would be clear to identify which dependant variables that need processing after visualization.
+As we can see from the summary statistics above, there are some outliers needs to be proceessed. It would be clear to identify which dependant variables that need processing after the visualization step.
+
+First of all, I would like to see which variables contain missing values.
 
 ```{r}
 # The percentage of data missing in train
 
 cat(sprintf("Percentage of missing values in the overall train dataset: %s%s\n", round(length(which(is.na(train) == TRUE)) * 100 / (nrow(train) * ncol(train)), 2), "%"))
+```
+
+```{r}
+NAcol <- which(colSums(is.na(train)) > 0)
+sort(colSums(sapply(train[NAcol], is.na)), decreasing = TRUE)
+cat('There are', length(NAcol), 'columns with missing values')
 ```
 
 ## Visualization 
@@ -207,6 +222,12 @@ cat_car <- c(cat_var, 'BedroomAbvGr', 'HalfBath', ' KitchenAbvGr','BsmtFullBath'
 numeric_var <- names(train)[which(sapply(train, is.numeric))]
 train1_cat<-train[cat_var]
 train1_num<-train[numeric_var]
+```
+
+```{r, message=FALSE}
+ggplot(data=train[!is.na(train$SalePrice),], aes(x=SalePrice)) +
+        geom_histogram(fill="blue", binwidth = 10000) +
+        scale_x_continuous(breaks= seq(0, 800000, by=100000), labels = comma)
 ```
 
 ```{r}
@@ -374,7 +395,7 @@ ggplot(train, aes(x=log(SalePrice+1))) +
 ```
 
 
-```{r message=FALSE, warning=FALSE, fig.width=5, fig.height=5}
+```{r message=FALSE, warning=FALSE, fig.width=10, fig.height=10}
 
 signif_col <- train1_num %>%
   select(YearBuilt, FullBath, OverallQual, GrLivArea, TotRmsAbvGrd, X2ndFlrSF, SalePrice)
