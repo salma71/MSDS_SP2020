@@ -1,12 +1,15 @@
 ---
 title: "Final_Exam part#1"
 author: "Salma Elshahawy"
-date: "5/11/2020"
+date: "2020-05-15"
 output: 
   html_document:
+    theme: cosmo
+    highlight: tango
     toc: true
+    number_section: false
     toc_float:
-      collapsed: false
+      collapsed: true
       smooth_scroll: true
     df_print: paged
   pdf_document:
@@ -46,7 +49,7 @@ Y <- rnorm(n, mean = me, sd = sd)
 ```
 
 
-### **Probability.**  
+## Probability {.tabset}
 
 Calculate as a minimum the below probabilities a through c. Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
 
@@ -55,9 +58,9 @@ Calculate as a minimum the below probabilities a through c. Assume the small let
 (y <- quantile(Y, 0.25)[[1]])
 ```
 
-- a.   P(X>x | X>y)
+### P(X>x | X>y)
 
-$$P(X>x | X>y) = \frac{P(X>145.0453) \quad& P(X>48.85452) }{P(X>48.85452)}$$
+$$P(X>x | X>y) = \frac{P(X>145.0453) \quad  P(X>48.85452) }{P(X>48.85452)}$$
 
 
 ```{r}
@@ -67,7 +70,7 @@ $$P(X>x | X>y) = \frac{P(X>145.0453) \quad& P(X>48.85452) }{P(X>48.85452)}$$
 ```
 0.6 is the probability that X is **greater than** its median given that X is **greater than** the first quartile of Y.
 
-- b. P(X>x , Y>y)
+### P(X>x , Y>y)
 
 $$P(X>x , X>y) = {P(X>145.0453) . P(Y>48.85452) }$$
 
@@ -77,7 +80,7 @@ $$P(X>x , X>y) = {P(X>145.0453) . P(Y>48.85452) }$$
 
 0.36 is the probability that X and Y are **greater than** all possible x and y. 
 
-- c. P(X<x | X>y)
+### P(X<x | X>y)
 
 $$P(X<x | X>y) = \frac{P(X<145.0453) . P(X>48.85452) }{P(X>48.85452)}$$
 
@@ -90,6 +93,8 @@ $$P(X<x | X>y) = \frac{P(X<145.0453) . P(X>48.85452) }{P(X>48.85452)}$$
 
 0.39 is the probability of X **less than** its median **and greater than** the first quantile of Y.
 
+
+### Investigating the formula 
 
 Investigate whether $P(X>x \quad and \quad  Y>y)=P(X>x)P(Y>y)$ by building a table and evaluating the marginal and joint probabilities.
 
@@ -105,7 +110,7 @@ rownames(results)  <- c("Y<y", "Y>y", "total")
 results
 ```
 
-**Probability matrix **
+## Probability matrix {.tabset}
 
 ```{r}
 (prob_tab <- results/n)
@@ -124,14 +129,19 @@ Since the results are so similar we can conclude that both X and Y are independe
 
 Check to see if independence holds by using Fisher’s Exact Test and the Chi Square Test.  What is the difference between the two? Which is most appropriate?
 
+### Fisher test
+
 ```{r}
 fisher.test(results,simulate.p.value=TRUE)
 ```
 
+### Chai-Test
 
 ```{r}
 chisq.test(results, correct=TRUE)
 ```
+
+### Comparasion
 
 **"Fisher's exact test"** is a way to test the association between two categorical variables when you have small cell sizes (expected values less than 5). While, **Chi-square** test is used when the cell sizes are expected to be large. If the sample size is small (or expected cell sizes <5),Fisher's exact test should be used. Otherwise, the two tests will give relatively the same answers. With large cell sizes, their answer should be very similar.
 
@@ -139,4 +149,5 @@ chisq.test(results, correct=TRUE)
 
   - [Github repo - exam](https://github.com/salma71/MSDS_SP2020/tree/master/Spring2020/computational_mod_605/Final_exam)
   - [Kaggle account - username: salmaeng](https://www.kaggle.com/salmaeng)
+  - [House prices - kaggle advance regression model - part#2](https://rpubs.com/salmaeng/kaggle_houseprices)
   - [Presentation]()

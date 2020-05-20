@@ -6,7 +6,6 @@ output:
   html_document:
     theme: cosmo
     highlight: tango
-    code_folding: hide
     toc: true
     number_section: false
     toc_float:
@@ -1585,7 +1584,7 @@ house$MoSold <- as.factor(house$MoSold)
 
 Although possible a bit less steep than expected, the effects of the Banking crises that took place at the end of 2007 can be seen indeed. After the highest median prices in 2007, the prices gradually decreased. However, seasonality seems to play a bigger role, as you can see below.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.width=10, fig.height=5}
 ys <- ggplot(house[!is.na(house$SalePrice),], aes(x=as.factor(YrSold), y=SalePrice)) +
         geom_bar(stat='summary', fun.y = "median", fill='blue')+
         scale_y_continuous(breaks= seq(0, 800000, by=25000), labels = comma) +
@@ -2080,7 +2079,6 @@ dim(DFnorm)
 
 ### One hot encoding the categorical variables
 
-The last step needed to ensure that all predictors are converted into numeric columns (which is required by most Machine Learning algorithms) is to 'one-hot encode' the categorical variables. This basically means that all (not ordinal) factor values are getting a seperate colums with 1s and 0s (1 basically means Yes/Present). To do this one-hot encoding, I am using the `model.matrix()` function.
 
 ```{r message=FALSE, warning=FALSE}
 DFdummies <- as.data.frame(model.matrix(~.-1, DFfactors))
@@ -2089,7 +2087,6 @@ dim(DFdummies)
 
 ### Removing levels with few or no observations in train or test
 
-In previous versions, I worked with Caret's `Near Zero Variance` function. Although this works, it also is a quick fix and too much information got lost. For instance, by using the defaults, all Neighborhoods with less than 146 houses are omitted as (one-hot encoded) variables (frequency ratio higher than 95/5). Therefore, I have taken amore carefull manual approach in this version.
 
 ```{r message=FALSE, warning=FALSE}
 #check if some values are absent in the test set
@@ -2156,10 +2153,6 @@ test1 <- combined[is.na(house$SalePrice),]
 
 ### Lasso regression model
 
-I have also tried Ridge and Elastic Net models, but since lasso gives the best results of those 3 models I am only keeping the lasso model in the document.
-
-The elastic-net penalty is controlled by alpha, and bridges the gap between lasso (alpha=1) and ridge (alpha=0). The tuning parameter lambda controls the overall strength of the penalty. It is known that the ridge penalty shrinks the coefficients of correlated predictors towards each other while the lasso tends to pick one of them and discard the others.
-
 Below, I am using caret cross validation to find the best value for lambda, which is the only hyperparameter that needs to be tuned for the lasso model.
 
 ```{r message=FALSE, warning=FALSE}
@@ -2172,9 +2165,6 @@ lasso_mod$bestTune
 min(lasso_mod$results$RMSE)
 ```
 
-The documentation of the caret `varImp' function says: for glmboost and glmnet the absolute value of the coefficients corresponding to the tuned model are used.
-
-Although this means that a real ranking of the most important variables is not stored, it gives me the opportunity to find out how many of the variables are not used in the model (and hence have coefficient 0).
 
 ```{r message=FALSE, warning=FALSE}
 lassoVarImp <- varImp(lasso_mod,scale=F)
@@ -2197,10 +2187,6 @@ length(predictions_lasso)
 
 ### XGBoost model
 
-Initially, I just worked with the XGBoost package directly. The main reason for this was that the package uses its own efficient datastructure (xgb.DMatrix). The package also provides a cross validation function. However, this CV function only determines the optimal number of rounds, and does not support a full grid search of hyperparameters.
-
-Although caret does not seem to use the (fast) datastructure of the xgb package, I eventually decided to do hyperparameter tuning with it anyway, as it at least supports a full grid search. As far as I understand it, the main parameters to tune to avoid overfitting are max_depth, and min_child_weight (see [XGBoost documentation](http://xgboost.readthedocs.io/en/latest/how_to/param_tuning.html)). Below I am setting up a grid that tunes both these parameters, and also the eta (learning rate).
-
 ```{r message=FALSE, warning=FALSE}
 xgb_grid = expand.grid(
 nrounds = 1000,
@@ -2213,20 +2199,7 @@ subsample=1
 )
 ```
 
-The next step is to let caret find the best hyperparameter values (using 5 fold cross validation).
 
-```{r message=FALSE, warning=FALSE}
-#xgb_caret <- train(x=train1, y=house$SalePrice[!is.na(house$SalePrice)], method='xgbTree', trControl= my_control, tuneGrid=xgb_grid) 
-#xgb_caret$bestTune
-```
-
-As expected, this took quite a bit of time (locally). As I want to limit the running time on Kaggle, I disabled the code, and am just continuing with the results. According to caret, the 'bestTune' parameters are:
-
-* Max_depth=3
-* eta=0.05
-* Min_child_weight=4
-
-In the remainder of this section, I will continue to work with the xgboost package directly. Below, I am starting with the preparation of the data in the recommended format.
 
 ```{r message=FALSE, warning=FALSE}
 label_train <- house$SalePrice[!is.na(house$SalePrice)]
@@ -2298,7 +2271,7 @@ write.csv(sub_avg, file = 'Lasso.csv', row.names = F)
 
   - [Github repo - exam](https://github.com/salma71/MSDS_SP2020/tree/master/Spring2020/computational_mod_605/Final_exam)
   - [Kaggle account - username: salmaeng](https://www.kaggle.com/salmaeng)
-  - [Part_1 of the exam]()
+  - [Part_1 of the exam](https://rpubs.com/salmaeng/617370)
   - [Presentation]()
 
 
