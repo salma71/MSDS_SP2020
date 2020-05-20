@@ -1,5 +1,5 @@
 ---
-title: "Final_Exam"
+title: "Final_Exam part#1"
 author: "Salma Elshahawy"
 date: "5/11/2020"
 output: 
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-Your final is due by the end of the last week of class.  You should post your solutions to your GitHub account or RPubs.  You are also expected to make a short presentation via YouTube  and post that recording to the board.  This project will show off your ability to understand the elements of the class.
+Your final is due by the end of the last week of class. You should post your solutions to your GitHub account or RPubs. You are also expected to make a short presentation via YouTube  and post that recording to the board. This project will show off your ability to understand the elements of the class.
 
 ## Problem 1
 
@@ -46,7 +46,9 @@ Y <- rnorm(n, mean = me, sd = sd)
 ```
 
 
-**Probability.**  Calculate as a minimum the below probabilities a through c. Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
+### **Probability.**  
+
+Calculate as a minimum the below probabilities a through c. Assume the small letter "x" is estimated as the median of the X variable, and the small letter "y" is estimated as the 1st quartile of the Y variable.  Interpret the meaning of all probabilities.
 
 ```{r}
 (x <- median(X))
@@ -103,7 +105,7 @@ rownames(results)  <- c("Y<y", "Y>y", "total")
 results
 ```
 
-Probability matrix 
+**Probability matrix **
 
 ```{r}
 (prob_tab <- results/n)
@@ -133,3 +135,8 @@ chisq.test(results, correct=TRUE)
 
 **"Fisher's exact test"** is a way to test the association between two categorical variables when you have small cell sizes (expected values less than 5). While, **Chi-square** test is used when the cell sizes are expected to be large. If the sample size is small (or expected cell sizes <5),Fisher's exact test should be used. Otherwise, the two tests will give relatively the same answers. With large cell sizes, their answer should be very similar.
 
+## Modeling, Kaggle competition
+
+  - [Github repo - exam](https://github.com/salma71/MSDS_SP2020/tree/master/Spring2020/computational_mod_605/Final_exam)
+  - [Kaggle account - username: salmaeng](https://www.kaggle.com/salmaeng)
+  - [Presentation]()
